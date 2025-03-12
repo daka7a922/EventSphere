@@ -5,6 +5,7 @@ import com.github.daka7a922.eventsphere.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -24,5 +25,9 @@ public class Ticket {
 
     @ManyToOne
     private User owner;
+
+    private LocalDateTime date;
+
+    private TicketStatus status;
 
 }
