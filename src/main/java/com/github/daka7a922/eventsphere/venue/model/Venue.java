@@ -1,9 +1,6 @@
 package com.github.daka7a922.eventsphere.venue.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
@@ -19,4 +16,19 @@ public class Venue {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String address;
+
+    private String city;
+
+    private String country;
+
+    private String description;
+
+    private VenueType type;
+
 }
