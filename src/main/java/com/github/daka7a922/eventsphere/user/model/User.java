@@ -4,6 +4,7 @@ import com.github.daka7a922.eventsphere.event.model.Event;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -42,5 +43,11 @@ public class User {
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<Event> events = new ArrayList<>();
+
+    @Column(nullable = false)
+    private LocalDateTime createdOn;
+
+    @Column(nullable = false)
+    private LocalDateTime updatedOn;
 
 }
