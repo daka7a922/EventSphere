@@ -19,14 +19,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
         http
                 .authorizeHttpRequests(matchers -> matchers
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/", "/register", "/1","/2","/3","/4","/5" ).permitAll()
+                        .requestMatchers("/", "/register","/1","/2","/3","/4","/5" ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
 //                        .usernameParameter("username")
 //                        .passwordParameter("password")
-                        .defaultSuccessUrl("/home", true)
+                        .defaultSuccessUrl("/dashboard", true)
                         .failureUrl("/login?error")
                         .permitAll())
                 .logout(logout -> logout

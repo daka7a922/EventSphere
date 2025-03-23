@@ -1,10 +1,13 @@
 package com.github.daka7a922.eventsphere.web;
 
+import com.github.daka7a922.eventsphere.security.AuthenticationDetails;
+import com.github.daka7a922.eventsphere.user.model.User;
 import com.github.daka7a922.eventsphere.user.service.UserService;
 import com.github.daka7a922.eventsphere.web.dto.LoginRequest;
 import com.github.daka7a922.eventsphere.web.dto.RegisterRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,6 +70,20 @@ public class IndexController {
 
     }
 
+    @GetMapping("/dashboard")
+    public ModelAndView getHomePage(@AuthenticationPrincipal AuthenticationDetails userDetails) {
+
+        User user = userService.getByUsername(userDetails.getUsername());
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("dashboard");
+        modelAndView.addObject("user", user);
+
+        return modelAndView;
+    }
+
+
+
     // TESTING HTMLs //
 
     @GetMapping("1")
@@ -87,7 +104,7 @@ public class IndexController {
     }
     @GetMapping("5")
     public String index5() {
-        return "user-dashboard";
+        return "dashboard";
     }
 
     @GetMapping("6")

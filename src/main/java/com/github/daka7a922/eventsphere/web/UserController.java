@@ -2,6 +2,7 @@ package com.github.daka7a922.eventsphere.web;
 
 import com.github.daka7a922.eventsphere.user.model.User;
 import com.github.daka7a922.eventsphere.user.service.UserService;
+import com.github.daka7a922.eventsphere.web.mapper.DtoMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +29,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("user-settings");
         modelAndView.addObject("user", user);
-       // modelAndView.addObject("userEditRequest", DtoMapper.mapUserToUserProfileEditRequest(user));
+        modelAndView.addObject("userEditRequest", DtoMapper.mapUserToUserEditRequest(user));
 
         return modelAndView;
     }
