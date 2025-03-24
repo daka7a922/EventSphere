@@ -78,6 +78,7 @@ public class IndexController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("dashboard");
         modelAndView.addObject("user", user);
+        modelAndView.addObject("activePage", "dashboard");
 
         return modelAndView;
     }

@@ -30,6 +30,7 @@ public class UserController {
         modelAndView.setViewName("user-settings");
         modelAndView.addObject("user", user);
         modelAndView.addObject("userEditRequest", DtoMapper.mapUserToUserEditRequest(user));
+        modelAndView.addObject("activePage", "user-settings");
 
         return modelAndView;
     }
