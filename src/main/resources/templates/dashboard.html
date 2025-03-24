@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/dashboard.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <title>EventSphere - User Dashboard</title>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <nav>
+            <a th:href="@{/dashboard}" class="logo">EventSphere</a>
+            <ul class="nav-links">
+                <li><a th:href="@{/events/all-events}">Browse Events</a></li>
+                <li><a th:href="@{/create-event}">Create Event</a></li>
+                <li><a th:href="@{/about-us}">About</a></li>
+<!--                TODO-->
+                <li><a th:href="@{/dashboard}" class="btn btn-primary" th:text="${user.username}"></a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="container" th:object="${user}">
+    <div class="dashboard-layout">
+        <div class="dashboard-sidebar">
+            <div class="user-profile">
+                <img th:src="${#strings.isEmpty(user.profilePicture) ? 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png' : user.profilePicture}" alt="Profile Picture" class="user-avatar">
+                <h3 class="user-name" th:text="${user.username}"></h3>
+                <p class="user-email" th:text = "${#strings.isEmpty(user.email) ? 'Edit your profile and add email' : user.email}"></p>
+                <a th:href="@{'/users/'+ ${user.id} +'/user-settings'}" class="btn btn-primary">Edit Profile</a>
+            </div>
+
+            <ul class="nav-menu">
+                <li th:class="${activePage == 'dashboard' ? 'active' : ''}">
+                    <a th:href="@{/dashboard}"><span class="nav-icon">📊</span> Dashboard</a>
+                </li>
+                <li th:class="${activePage == 'my-tickets' ? 'active' : ''}">
+                    <a th:href="@{/my-tickets}"><span class="nav-icon">🎟️</span> My Tickets</a>
+                </li>
+                <li th:class="${activePage == 'saved-events' ? 'active' : ''}">
+                    <a th:href="@{/saved-events}"><span class="nav-icon">❤️</span> Saved Events</a>
+                </li>
+                <li th:class="${activePage == 'purchase-history' ? 'active' : ''}">
+                    <a th:href="@{/purchase-history}"><span class="nav-icon">💰</span> Purchase History</a>
+                </li>
+                <li th:class="${activePage == 'notifications' ? 'active' : ''}">
+                    <a th:href="@{/notifications}"><span class="nav-icon">🔔</span> Notifications</a>
+                </li>
+                <li th:class="${activePage == 'user-settings' ? 'active' : ''}">
+                    <a th:href="@{'/users/'+ ${user.id} +'/user-settings'}"><span class="nav-icon">⚙️</span> Settings</a>
+                </li>
+                <li th:if="${user.role.name() == 'ADMIN'}" th:class="${activePage == 'venue-management' ? 'active' : ''}">
+                    <a th:href="@{/venue/venue-management}"><span class="nav-icon">🏢</span> Venue Management</a>
+                </li>
+                <li th:if="${user.role.name() == 'ADMIN'}" th:class="${activePage == 'user-management' ? 'active' : ''}">
+                    <a th:href="@{/admin/user-management}"><span class="nav-icon">👥</span> User Management</a>
+                </li>
+                <li th:class="${activePage == 'logout' ? 'active' : ''}">
+                    <a th:href="@{/logout}"><span class="nav-icon">🚪</span> Logout</a>
+                </li>
+            </ul>
+        </div>
+        <!-- TODO -->
+        <div class="dashboard-main">
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-title">Upcoming Events</span>
+                    <span class="stat-value">4</span>
+                    <span class="stat-description">Events in the next 30 days</span>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-title">Total Tickets</span>
+                    <span class="stat-value">12</span>
+                    <span class="stat-description">Across all your events</span>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-title">Spent on Events</span>
+                    <span class="stat-value">€489</span>
+                    <span class="stat-description">In the last 6 months</span>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-title">Saved Events</span>
+                    <span class="stat-value">8</span>
+                    <span class="stat-description">Events you've bookmarked</span>
+                </div>
+            </div>
+
+            <!-- Upcoming Events Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Upcoming Events</h2>
+                    <a href="my-tickets.html" class="btn btn-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    <!-- Event Card 1 -->
+                    <div class="event-card">
+                        <div class="event-date">
+                            <span class="event-day">25</span>
+                            <span class="event-month">Mar</span>
+                        </div>
+                        <div class="event-image"></div>
+                        <div class="event-details">
+                            <span class="event-category">Conference</span>
+                            <h3 class="event-title">Tech Innovation Summit 2025</h3>
+                            <p class="event-location">📍 Digital Convention Center</p>
+                            <div class="event-time">🕒 9:00 AM - 5:00 PM</div>
+                            <div class="event-actions">
+                                <a href="view-ticket.html" class="btn btn-primary">View Ticket</a>
+                                <a href="event-details.html" class="btn btn-info">Event Details</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Card 2 -->
+                    <div class="event-card">
+                        <div class="event-date">
+                            <span class="event-day">10</span>
+                            <span class="event-month">Apr</span>
+                        </div>
+                        <div class="event-image"></div>
+                        <div class="event-details">
+                            <span class="event-category">Concert</span>
+                            <h3 class="event-title">Summer Music Festival</h3>
+                            <p class="event-location">📍 Central Park Amphitheater</p>
+                            <div class="event-time">🕒 7:00 PM - 11:00 PM</div>
+                            <div class="event-actions">
+                                <a href="view-ticket.html" class="btn btn-primary">View Ticket</a>
+                                <a href="event-details.html" class="btn btn-info">Event Details</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Card 3 -->
+                    <div class="event-card">
+                        <div class="event-date">
+                            <span class="event-day">12</span>
+                            <span class="event-month">Apr</span>
+                        </div>
+                        <div class="event-image"></div>
+                        <div class="event-details">
+                            <span class="event-category">Workshop</span>
+                            <h3 class="event-title">AI Development Bootcamp</h3>
+                            <p class="event-location">📍 Tech Hub Downtown</p>
+                            <div class="event-time">🕒 10:00 AM - 4:00 PM</div>
+                            <div class="event-actions">
+                                <a href="view-ticket.html" class="btn btn-primary">View Ticket</a>
+                                <a href="event-details.html" class="btn btn-info">Event Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Tickets Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">My Tickets</h2>
+                </div>
+                <div class="card-body">
+                    <div class="tabs">
+                        <div class="tab-item active">Upcoming (4)</div>
+                        <div class="tab-item">Past (8)</div>
+                        <div class="tab-item">All Tickets (12)</div>
+                    </div>
+
+                    <div class="filter-bar">
+                        <input type="text" class="search-input" placeholder="Search tickets...">
+                        <select class="filter-select">
+                            <option value="">All Categories</option>
+                            <option value="conference">Conference</option>
+                            <option value="concert">Concert</option>
+                            <option value="workshop">Workshop</option>
+                            <option value="exhibition">Exhibition</option>
+                        </select>
+                        <select class="filter-select">
+                            <option value="">Sort By: Date</option>
+                            <option value="name">Sort By: Event Name</option>
+                            <option value="price">Sort By: Price</option>
+                        </select>
+                    </div>
+
+                    <!-- Ticket Card 1 -->
+                    <div class="ticket-card">
+                        <div class="ticket-header">
+                            <span class="ticket-status status-confirmed">Confirmed</span>
+                            <h3 class="ticket-title">Tech Innovation Summit 2025</h3>
+                            <p class="ticket-date">March 25, 2025 • 9:00 AM - 5:00 PM</p>
+                        </div>
+                        <div class="ticket-body">
+                            <div class="ticket-info">
+                                <div class="ticket-detail">
+                                    <span class="detail-label">Ticket Type</span>
+                                    <span class="detail-value">Standard Admission</span>
+                                </div>
+                                <div class="ticket-detail">
+                                    <span class="detail-label">Quantity</span>
+                                    <span class="detail-value">1</span>
+                                </div>
+                                <div class="ticket-detail">
+                                    <span class="detail-label">Order #</span>
+                                    <span class="detail-value">ES-55436782</span>
+                                </div>
+                                <div class="ticket-detail">
+                                    <span class="detail-label">Venue</span>
+                                    <span class="detail-value">Digital Convention Center</span>
+                                </div>
+                            </div>
+                            <div class="ticket-actions">
+                                <a href="view-ticket.html" class="btn btn-primary">View Ticket</a>
+                                <a href="#" class="btn btn-info">Add to Calendar</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ticket Card 2 -->
+                    <div class="ticket-card">
+                        <div class="ticket-header">
+                            <span class="ticket-status status-confirmed">Confirmed</span>
+                            <h3 class="ticket-title">Summer Music Festival</h3>
+                            <p class="ticket-date">April 10, 2025 • 7:00 PM - 11:00 PM</p>
+                        </div>
+                        <div class="ticket-body">
+                            <div class="ticket-info">
+                                <div class="ticket-detail">
+                                    <span class="detail-label">Ticket Type</span>
+                                    <span class="detail-value">VIP Pass</span>
+                                </div>
+                                <div class="ticket-detail">
+                                    <span class="detail-label">Quantity</span>
+                                    <span class="detail-value">2</span>
+                                </div>
+                                <div class="ticket-detail">
+                                    <span class="detail-label">Order #</span>
+                                    <span class="detail-value">ES-55437921</span>
+                                </div>
+                                <div class="ticket-detail">
+                                    <span class="detail-label">Venue</span>
+                                    <span class="detail-value">Central Park Amphitheater</span>
+                                </div>
+                            </div>
+                            <div class="ticket-actions">
+                                <a href="view-ticket.html" class="btn btn-primary">View Ticket</a>
+                                <a href="#" class="btn btn-info">Add to Calendar</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ticket Card 3 -->
+                    <div class="ticket-card">
+                        <div class="ticket-header">
+                            <span class="ticket-status status-pending">Payment Pending</span>
+                            <h3 class="ticket-title">Blockchain Revolution Forum</h3>
+                            <p class="ticket-date">May 8, 2025 • 9:00 AM - 6:00 PM</p>
+                        </div>
+                        <div class="ticket-body">
+                            <div class="ticket-info">
+                                <div class="ticket-detail">
+                                    <span class="detail-label">Ticket Type</span>
+                                    <span class="detail-value">Standard Admission</span>
+                                </div>
+                                <div class="ticket-detail">
+                                    <span class="detail-label">Quantity</span>
+                                    <span class="detail-value">1</span>
+                                </div>
+                                <div class="ticket-detail">
+                                    <span class="detail-label">Order #</span>
+                                    <span class="detail-value">ES-55440185</span>
+                                </div>
+                                <div class="ticket-detail">
+                                    <span class="detail-label">Venue</span>
+                                    <span class="detail-value">Finance District Conference Hall</span>
+                                </div>
+                            </div>
+                            <div class="ticket-actions">
+                                <a href="complete-payment.html" class="btn btn-success">Complete Payment</a>
+                                <a href="event-details.html" class="btn btn-info">Event Details</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <ul class="pagination">
+                        <li><a href="#">&laquo;</a></li>
+                        <li class="active"><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Recommended Events -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Recommended For You</h2>
+                    <a href="events.html" class="btn btn-primary">Browse All Events</a>
+                </div>
+                <div class="card-body">
+                    <div class="event-card">
+                        <div class="event-date">
+                            <span class="event-day">03</span>
+                            <span class="event-month">May</span>
+                        </div>
+                        <div class="event-image"></div>
+                        <div class="event-details">
+                            <span class="event-category">Networking</span>
+                            <h3 class="event-title">Tech Startup Mixer</h3>
+                            <p class="event-location">📍 Urban Lounge & Co-working Space</p>
+                            <div class="event-time">🕒 6:00 PM - 9:00 PM</div>
+                            <div class="event-actions">
+                                <a href="purchase-ticket.html" class="btn btn-success">Get Tickets</a>
+                                <a href="event-details.html" class="btn btn-info">View Details
