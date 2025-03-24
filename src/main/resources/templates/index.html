@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,10 +13,16 @@
         <nav>
             <a th:href="@{/}" class="logo">EventSphere</a>
             <ul class="nav-links">
-                <li><a th:href="@{/all-events.html}">Browse Events</a></li>
+                <li><a th:href="@{/events/all-events}">Browse Events</a></li>
                 <li><a th:href="@{/create-event.html}">Create Event</a></li>
                 <li><a th:href="@{/about-us.html}">About</a></li>
-                <li><a th:href="@{/login}" class="btn btn-primary">Login</a></li>
+                <li sec:authorize="isAnonymous()">
+                    <a th:href="@{/login}" class="btn btn-primary">Login</a>
+                </li>
+
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/dashboard}" class="btn btn-primary">Account</a>
+                </li>
             </ul>
         </nav>
     </div>
@@ -118,16 +124,16 @@
                     <li><a href="all-events.html">Browse Events</a></li>
                     <li><a href="tickets.html">My Tickets</a></li>
                     <li><a href="faq.html">FAQs</a></li>
-                    <li><a href="refund.html">Refund Policy</a></li>
+<!--                    <li><a href="refund.html">Refund Policy</a></li>-->
                 </ul>
             </div>
             <div class="footer-column">
                 <h3>For Organizers</h3>
                 <ul>
                     <li><a href="create-event.html">Create Event</a></li>
-                    <li><a href="">Pricing</a></li>
-                    <li><a href="">Resources</a></li>
-                    <li><a href="">Success Stories</a></li>
+<!--                    <li><a href="">Pricing</a></li>-->
+<!--                    <li><a href="">Resources</a></li>-->
+<!--                    <li><a href="">Success Stories</a></li>-->
                 </ul>
             </div>
             <div class="footer-column">
