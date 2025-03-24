@@ -6,6 +6,7 @@ import com.github.daka7a922.eventsphere.user.model.User;
 import com.github.daka7a922.eventsphere.user.model.UserRole;
 import com.github.daka7a922.eventsphere.user.repository.UserRepository;
 import com.github.daka7a922.eventsphere.web.dto.RegisterRequest;
+import com.github.daka7a922.eventsphere.web.dto.UserEditRequest;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
@@ -79,5 +80,35 @@ public class UserService implements UserDetailsService {
     public User getUserById(UUID id) {
 
         return userRepository.findById(id).orElseThrow(() -> new DomainException("User with id [%s] does not exist".formatted(id)));
+    }
+
+    public void updateUserSettings(UUID id, @Valid UserEditRequest userEditRequest) {
+
+        User user = getUserById(id);
+
+        if (userEditRequest.getFirstName() != null && !userEditRequest.getFirstName().trim().isEmpty()) {
+            user.setFirstName(userEditRequest.getFirstName());
+        }
+
+        if (userEditRequest.getLastName() != null && !userEditRequest.getLastName().trim().isEmpty()) {
+            user.setLastName(userEditRequest.getLastName());
+        }
+
+        if (userEditRequest.getEmail() != null && !userEditRequest.getEmail().trim().isEmpty()) {
+            user.setEmail(userEditRequest.getEmail());
+        }
+
+        if (userEditRequest.getProfilePicture() != null && !userEditRequest.getProfilePicture().trim().isEmpty()) {
+            user.setProfilePicture(userEditRequest.getProfilePicture());
+        }
+
+        user.setUpdatedOn(LocalDateTime.now());
+
+        userRepository.save(user);
+
+        log.info("Successfully update user profile for user %s with id [%s]".formatted(user.getUsername(),user.getId()));
+
+
+
     }
 }
