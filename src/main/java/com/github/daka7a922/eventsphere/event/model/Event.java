@@ -33,6 +33,8 @@ public class Event {
 
     private LocalDate date;
 
+    private String eventPicture;
+
     @Enumerated(EnumType.STRING)
     private EventType eventType;
 
