@@ -21,6 +21,7 @@ public class VenueInit implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        //Initializing venues manually, because venues will only be added by validated organizers//
 
         if (!venueService.getAllVenues().isEmpty()) {
             return;
@@ -36,6 +37,40 @@ public class VenueInit implements CommandLineRunner {
                 .build();
 
         venueService.registerVenue(venue1);
+
+        VenueRegisterRequest venue2 = VenueRegisterRequest.builder()
+                .name("Vasil Levski Stadium")
+                .address("Bulgaria Blvd")
+                .city("Sofia")
+                .country("Bulgaria")
+                .description("Vasil Levski National Stadium")
+                .type(VenueType.STADIUM)
+                .build();
+
+        venueService.registerVenue(venue2);
+
+        VenueRegisterRequest venue3 = VenueRegisterRequest.builder()
+                .name("Arena 8888")
+                .address("Asen Yordanov Blvd")
+                .city("Sofia")
+                .country("Bulgaria")
+                .description("A multi-purpose indoor arena")
+                .type(VenueType.ARENA)
+                .build();
+
+        venueService.registerVenue(venue3);
+
+        VenueRegisterRequest venue4 = VenueRegisterRequest.builder()
+                .name("Drama theater Plovdiv")
+                .address("High street")
+                .city("Plovdiv")
+                .country("Bulgaria")
+                .description("Plovdiv Drama Theatre is the first professional Bulgarian theatre, founded in 1881, and one of the leading cultural institutions in the country.")
+                .type(VenueType.THEATER)
+                .build();
+
+        venueService.registerVenue(venue4);
+
 
 
     }

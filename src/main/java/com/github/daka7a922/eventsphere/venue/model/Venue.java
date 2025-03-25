@@ -29,6 +29,7 @@ public class Venue {
 
     private String description;
 
+    @Enumerated(EnumType.STRING)
     private VenueType type;
 
 }
