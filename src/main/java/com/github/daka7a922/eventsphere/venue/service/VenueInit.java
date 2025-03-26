@@ -30,8 +30,8 @@ public class VenueInit implements CommandLineRunner {
         }
 
         VenueRegisterRequest venue1 = VenueRegisterRequest.builder()
-                .name("Gold Club")
-                .address("Gold street 1")
+                .name("Dock 5")
+                .address("DOCK 5 Night Club, Morska gara Burgas, Harbour complex, Magaziq 1, 8000 Burgas")
                 .city("Burgas")
                 .country("Bulgaria")
                 .description("Beach club")
@@ -45,7 +45,7 @@ public class VenueInit implements CommandLineRunner {
                 .address("Bulgaria Blvd")
                 .city("Sofia")
                 .country("Bulgaria")
-                .description("Vasil Levski National Stadium")
+                .description("Evlogi i Hristo Georgiev Blvd 38, 1164 Sofia")
                 .type(VenueType.STADIUM)
                 .build();
 
@@ -53,7 +53,7 @@ public class VenueInit implements CommandLineRunner {
 
         VenueRegisterRequest venue3 = VenueRegisterRequest.builder()
                 .name("Arena 8888")
-                .address("Asen Yordanov Blvd")
+                .address("Blvd Asen Yordanov 1, 1113 Sofia")
                 .city("Sofia")
                 .country("Bulgaria")
                 .description("A multi-purpose indoor arena")
@@ -64,7 +64,7 @@ public class VenueInit implements CommandLineRunner {
 
         VenueRegisterRequest venue4 = VenueRegisterRequest.builder()
                 .name("Drama theater Plovdiv")
-                .address("High street")
+                .address("TsentarPlovdiv Center, ul.Knyaz Alexander I 38, 4000 Plovdiv")
                 .city("Plovdiv")
                 .country("Bulgaria")
                 .description("Plovdiv Drama Theatre is the first professional Bulgarian theatre, founded in 1881, and one of the leading cultural institutions in the country.")
