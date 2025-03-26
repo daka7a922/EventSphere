@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class EventService {
 
@@ -35,5 +37,10 @@ public class EventService {
         return eventRepository.save(event);
 
 
+    }
+
+    public Event getById(UUID id) {
+
+        return eventRepository.getEventById(id);
     }
 }
