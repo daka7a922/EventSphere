@@ -84,8 +84,13 @@ public class EventController {
     @GetMapping("/event-details/{id}")
     public ModelAndView getEventDetails( @AuthenticationPrincipal AuthenticationDetails userDetails, @PathVariable UUID id) {
 
+        Event event = eventService.getById(id);
+        User user = userService.getByUsername(userDetails.getUsername());
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("event-details");
+        modelAndView.addObject("event", event);
+        modelAndView.addObject("user", user);
 
         return modelAndView;
     }
