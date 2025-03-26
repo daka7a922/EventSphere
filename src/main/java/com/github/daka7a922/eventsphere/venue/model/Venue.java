@@ -20,7 +20,7 @@ public class Venue {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+   @Column(nullable = false)
     private String address;
 
     private String city;
