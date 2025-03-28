@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ public class Event {
     private LocalDateTime dateAndTime;
 
     private String eventPicture;
+
+    private BigDecimal price;
 
     @Enumerated(EnumType.STRING)
     private EventType eventType;
