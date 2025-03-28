@@ -1,7 +1,11 @@
 package com.github.daka7a922.eventsphere.venue.service;
 
+import com.github.daka7a922.eventsphere.user.model.User;
+import com.github.daka7a922.eventsphere.user.repository.UserRepository;
+import com.github.daka7a922.eventsphere.user.service.UserService;
 import com.github.daka7a922.eventsphere.venue.model.Venue;
 import com.github.daka7a922.eventsphere.venue.model.VenueType;
+import com.github.daka7a922.eventsphere.web.dto.RegisterRequest;
 import com.github.daka7a922.eventsphere.web.dto.VenueRegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -13,10 +17,14 @@ import java.util.List;
 public class VenueInit implements CommandLineRunner {
 
     private final VenueService venueService;
+    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
-    public VenueInit(VenueService venueService) {
+    public VenueInit(VenueService venueService, UserRepository userRepository, UserService userService) {
         this.venueService = venueService;
+        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
 
@@ -72,8 +80,6 @@ public class VenueInit implements CommandLineRunner {
                 .build();
 
         venueService.registerVenue(venue4);
-
-
 
     }
 

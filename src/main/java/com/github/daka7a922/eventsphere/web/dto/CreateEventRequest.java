@@ -25,11 +25,11 @@ public class CreateEventRequest {
     @NotNull
     private String eventPictureURL;
 
-    @Size(max = 1000, message = "Description can be maximum 1000 symbols")
+    @Size(max = 2000, message = "Description can be maximum 1000 symbols")
     @NotBlank
     private String description;
 
-    @NotNull
+    @NotNull(message = "Please select date and time of the event")
     private LocalDateTime dateAndTime;
 
     @PositiveOrZero
@@ -38,7 +38,6 @@ public class CreateEventRequest {
 
     private EventType eventType;
 
-    @NotNull
     @Positive
     private Integer availableTickets;
 

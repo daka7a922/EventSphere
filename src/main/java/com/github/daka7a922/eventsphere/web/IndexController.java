@@ -101,7 +101,7 @@ public class IndexController {
     }
     @GetMapping("4")
     public String index4() {
-        return "ticket-purchase";
+        return "ticket-purchaseV2";
     }
     @GetMapping("5")
     public String index5() {

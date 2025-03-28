@@ -76,7 +76,7 @@ public class EventController {
 
 
     @PostMapping("/create-event")
-    public ModelAndView createNewEvent(@AuthenticationPrincipal AuthenticationDetails userDetails, @Valid CreateEventRequest createEventRequest , BindingResult bindingResult) {
+    public ModelAndView createNewEvent(@Valid CreateEventRequest createEventRequest , BindingResult bindingResult, @AuthenticationPrincipal AuthenticationDetails userDetails) {
 
 
         if (bindingResult.hasErrors()) {
@@ -87,6 +87,8 @@ public class EventController {
             modelAndView.addObject("user", user);
             modelAndView.addObject("allVenues", allVenues);
             modelAndView.addObject("createEventRequest", createEventRequest);
+
+            return modelAndView;
         }
 
         Event event = eventService.createEvent(createEventRequest);
