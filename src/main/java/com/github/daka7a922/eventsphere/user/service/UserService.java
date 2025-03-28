@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -86,21 +87,10 @@ public class UserService implements UserDetailsService {
 
         User user = getUserById(id);
 
-        if (userEditRequest.getFirstName() != null && !userEditRequest.getFirstName().trim().isEmpty()) {
-            user.setFirstName(userEditRequest.getFirstName());
-        }
-
-        if (userEditRequest.getLastName() != null && !userEditRequest.getLastName().trim().isEmpty()) {
-            user.setLastName(userEditRequest.getLastName());
-        }
-
-        if (userEditRequest.getEmail() != null && !userEditRequest.getEmail().trim().isEmpty()) {
-            user.setEmail(userEditRequest.getEmail());
-        }
-
-        if (userEditRequest.getProfilePicture() != null && !userEditRequest.getProfilePicture().trim().isEmpty()) {
-            user.setProfilePicture(userEditRequest.getProfilePicture());
-        }
+        updateFieldIfPresent(user, "firstName", userEditRequest.getFirstName());
+        updateFieldIfPresent(user, "lastName", userEditRequest.getLastName());
+        updateFieldIfPresent(user, "email", userEditRequest.getEmail());
+        updateFieldIfPresent(user, "profilePicture", userEditRequest.getProfilePicture());
 
         user.setUpdatedOn(LocalDateTime.now());
 
@@ -110,5 +100,21 @@ public class UserService implements UserDetailsService {
 
 
 
+    }
+
+    private void updateFieldIfPresent(User user, String fieldName, String value) {
+        if (value != null && !value.trim().isEmpty()) {
+            try {
+                Field field = User.class.getDeclaredField(fieldName);
+                field.setAccessible(true);
+                if (value == null || value.trim().isEmpty()) {
+                    field.set(user, null);
+                } else {
+                    field.set(user, value);
+                }
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                log.error("Error updating field: {}", fieldName, e);
+            }
+        }
     }
 }
