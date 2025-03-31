@@ -24,6 +24,8 @@ public class VenueRegisterRequest {
 
     private String description;
 
+    private int capacity;
+
     private VenueType type;
 
 }
