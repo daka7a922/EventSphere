@@ -37,6 +37,7 @@ public class VenueService {
                 .country(venueRegisterRequest.getCountry())
                 .description(venueRegisterRequest.getDescription())
                 .type(venueRegisterRequest.getType())
+                .capacity(venueRegisterRequest.getCapacity())
                 .build();
 
         venueRepository.save(venue);
