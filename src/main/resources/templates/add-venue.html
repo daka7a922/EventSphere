@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/add-venue.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <title>EventSphere - Add Venue</title>
+
+</head>
+<body>
+<header>
+    <div class="container">
+        <nav>
+            <a th:href="@{/dashboard}" class="logo">EventSphere</a>
+            <ul class="nav-links">
+                <li><a th:href="@{/events/all-events}">Browse Events</a></li>
+                <li><a th:href="@{/events/create-event}">Create Event</a></li>
+                <li><a th:href="@{/about-us}">About</a></li>
+                <!--                TODO-->
+                <li><a th:href="@{/dashboard}" class="btn btn-primary" th:text="${user.username}"></a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="container" th:object="${user}">
+    <div class="dashboard-layout">
+        <div class="dashboard-sidebar">
+            <div class="user-profile">
+                <img th:src="${#strings.isEmpty(user.profilePicture) ? 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png' : user.profilePicture}" alt="Profile Picture" class="user-avatar">
+                <h3 class="user-name" th:text="${user.username}"></h3>
+                <p class="user-email" th:text="${#strings.isEmpty(user.email) ? 'Edit your profile and add email' : user.email}"></p>
+                <a th:href="@{'/users/'+ ${user.id} +'/user-settings'}" class="btn btn-primary">Edit Profile</a>
+            </div>
+
+            <ul class="nav-menu">
+                <li th:class="${activePage == 'dashboard' ? 'active' : ''}">
+                    <a th:href="@{/dashboard}"><span class="nav-icon">📊</span> Dashboard</a>
+                </li>
+                <li th:class="${activePage == 'my-tickets' ? 'active' : ''}">
+                    <a th:href="@{/my-tickets}"><span class="nav-icon">🎟️</span> My Tickets</a>
+                </li>
+                <li th:class="${activePage == 'saved-events' ? 'active' : ''}">
+                    <a th:href="@{/saved-events}"><span class="nav-icon">❤️</span> Saved Events</a>
+                </li>
+                <li th:class="${activePage == 'purchase-history' ? 'active' : ''}">
+                    <a th:href="@{/purchase-history}"><span class="nav-icon">💰</span> Purchase History</a>
+                </li>
+                <li th:class="${activePage == 'notifications' ? 'active' : ''}">
+                    <a th:href="@{/notifications}"><span class="nav-icon">🔔</span> Notifications</a>
+                </li>
+                <li th:class="${activePage == 'user-settings' ? 'active' : ''}">
+                    <a th:href="@{'/users/'+ ${user.id} +'/user-settings'}"><span class="nav-icon">⚙️</span> Settings</a>
+                </li>
+                <li th:if="${user.role.name() == 'ADMIN'}" th:class="${activePage == 'venue-management' ? 'active' : ''}">
+                    <a th:href="@{/venue/venue-management}"><span class="nav-icon">🏢</span> Venue Management</a>
+                </li>
+                <li th:if="${user.role.name() == 'ADMIN'}" th:class="${activePage == 'user-management' ? 'active' : ''}">
+                    <a th:href="@{/admin/user-management}"><span class="nav-icon">👥</span> User Management</a>
+                </li>
+                <li th:class="${activePage == 'logout' ? 'active' : ''}">
+                    <a th:href="@{/logout}"><span class="nav-icon">🚪</span> Logout</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="dashboard-content">
+            <h2 class="page-title">Add New Venue</h2>
+
+            <div class="form-container">
+                <form th:action="@{/venue/add-venue}" th:method="POST" th:object="${venueRegisterRequest}">
+                    <div class="form-group">
+                        <label for="name">Name*</label>
+                        <input type="text" id="name" th:field="*{name}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Address*</label>
+                        <input type="text" id="address" th:field="*{address}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" th:field="*{city}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <input type="text" id="country" th:field="*{country}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="capacity">Capacity</label>
+                        <input type="number" id="capacity" th:field="*{capacity}" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="type">Venue Type</label>
+                        <select id="type" th:field="*{type}">
+                            <option value="">Select type</option>
+                            <option th:each="venueType : ${T(com.github.daka7a922.eventsphere.venue.model.VenueType).values()}"
+                                    th:value="${venueType}"
+                                    th:text="${#strings.capitalize(#strings.toLowerCase(venueType))}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" th:field="*{description}"></textarea>
+                    </div>
+
+                    <div class="btn-container">
+                        <a th:href="@{/venue/venue-management}" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Save Venue</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
