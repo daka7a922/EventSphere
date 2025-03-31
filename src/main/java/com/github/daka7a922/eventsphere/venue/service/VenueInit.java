@@ -43,6 +43,7 @@ public class VenueInit implements CommandLineRunner {
                 .city("Burgas")
                 .country("Bulgaria")
                 .description("Beach club")
+                .capacity(700)
                 .type(VenueType.CLUB)
                 .build();
 
@@ -54,6 +55,7 @@ public class VenueInit implements CommandLineRunner {
                 .city("Sofia")
                 .country("Bulgaria")
                 .description("Evlogi i Hristo Georgiev Blvd 38, 1164 Sofia")
+                .capacity(43230)
                 .type(VenueType.STADIUM)
                 .build();
 
@@ -65,6 +67,7 @@ public class VenueInit implements CommandLineRunner {
                 .city("Sofia")
                 .country("Bulgaria")
                 .description("A multi-purpose indoor arena")
+                .capacity(12373)
                 .type(VenueType.ARENA)
                 .build();
 
@@ -76,6 +79,7 @@ public class VenueInit implements CommandLineRunner {
                 .city("Plovdiv")
                 .country("Bulgaria")
                 .description("Plovdiv Drama Theatre is the first professional Bulgarian theatre, founded in 1881, and one of the leading cultural institutions in the country.")
+                .capacity(500)
                 .type(VenueType.THEATER)
                 .build();
 
