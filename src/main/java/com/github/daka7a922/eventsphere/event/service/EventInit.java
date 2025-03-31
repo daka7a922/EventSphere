@@ -28,13 +28,13 @@ public class EventInit implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        List<Venue> venues = venueService.getAllVenues();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
 
         if (!eventService.getAllEvents().isEmpty()){
             return;
         }
+        List<Venue> venues = venueService.getAllVenues();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
         CreateEventRequest eventRequest1 = CreateEventRequest.builder()
                 .name("Matteo Bocelli")
