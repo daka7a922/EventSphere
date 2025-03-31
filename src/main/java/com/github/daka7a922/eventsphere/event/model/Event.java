@@ -46,6 +46,8 @@ public class Event {
     @ManyToOne
     private Venue venue;
 
+    private boolean isFeatured;
+
     @OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
     private List<Ticket> PurchasedTickets = new ArrayList<>();
 

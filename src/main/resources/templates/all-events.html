@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/all-events.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <title>All Events - EventSphere</title>
+
+</head>
+<body>
+<header>
+    <div class="container">
+        <nav>
+            <a th:href="@{/dashboard}" class="logo">EventSphere</a>
+            <ul class="nav-links">
+                <li><a th:href="@{/events/all-events}">Browse Events</a></li>
+                <li><a th:href="@{/events/create-event}">Create Event</a></li>
+                <li><a th:href="@{/about-us}">About</a></li>
+                <!--                TODO-->
+                <li><a th:href="@{/dashboard}" class="btn btn-primary" th:text="${user.username}"></a></li>
+            </ul>
+        </nav>
+        </nav>
+    </div>
+</header>
+
+
+<section class="page-header">
+    <div class="container">
+        <h1 class="page-title">All Events</h1>
+        <p class="page-subtitle">Discover amazing events happening around you</p>
+    </div>
+</section>
+
+
+<div class="container">
+    <div class="categories">
+        <a th:href="@{/events}"
+           class="category-btn"
+           th:classappend="${selectedType == null ? 'active' : ''}">
+            All
+        </a>
+        <a th:each="type : ${T(com.github.daka7a922.eventsphere.event.model.EventType).values()}"
+           th:href="@{/events(type=${type})}"
+           class="category-btn"
+           th:classappend="${selectedType == type ? 'active' : ''}"
+           th:text="${#strings.capitalize(#strings.toLowerCase(type))}">
+            Event Type
+        </a>
+    </div>
+
+
+    <section class="container">
+        <div class="event-grid">
+
+            <div class="event-card" th:each=" event : ${events}" th:value="${event}">
+                <div class="event-image" th:style="'background-image: url(' + ${event.eventPicture} + ')'"></div>
+                <div class="event-details">
+                    <span class="event-category" th:text="${#strings.capitalize(#strings.toLowerCase(event.eventType))}"></span>
+                    <h3 class="event-title" th:text="${event.name}"></h3>
+                    <div class="event-info">
+                        <span th:text="${'📅'+ #temporals.format(event.dateAndTime, 'MMM dd YYY HH:mm')}">📅 March 25, 2025</span>
+                        <span th:text="${'📍' + event.venue.name}">📍 Digital Convention Center</span>
+                    </div>
+                    <div class="event-footer">
+                        <span class="event-price" th:text="${'€'+event.price}">€149.99</span>
+                        <a th:href="@{'/events/event-details/'+ ${event.id}}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,5 +1,7 @@
 package com.github.daka7a922.eventsphere.web;
 
+import com.github.daka7a922.eventsphere.event.model.Event;
+import com.github.daka7a922.eventsphere.event.service.EventService;
 import com.github.daka7a922.eventsphere.security.AuthenticationDetails;
 import com.github.daka7a922.eventsphere.user.model.User;
 import com.github.daka7a922.eventsphere.user.service.UserService;
@@ -16,20 +18,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/")
 public class IndexController {
 
     private final UserService userService;
+    private final EventService eventService;
 
     @Autowired
-    public IndexController(UserService userService) {
+    public IndexController(UserService userService, EventService eventService) {
         this.userService = userService;
+        this.eventService = eventService;
     }
 
     @GetMapping
-    public String index() {
-        return "index";
+    public ModelAndView getIndexPage() {
+
+        List<Event> featuredEvents = eventService.getFeaturedEvents();
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        modelAndView.addObject("featuredEvents", featuredEvents);
+
+        return modelAndView;
     }
 
     @GetMapping("/register")

@@ -3,139 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EventSphere - Event Details</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/event-details.css}">
+    <link rel="stylesheet" type="text/css" href="/css/event-details.css">
+    <title>EventSphere - Tech Innovation Summit 2025</title>
+
 </head>
 <body>
+
 <header>
-    <div class="container">
+    <div class="container" th:object="${user}">
         <nav>
-            <div class="logo">Event<span>Sphere</span></div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="browse-events.html">Browse Events</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="signup.html" class="btn-primary">Sign Up</a></li>
+        <a th:href="@{/dashboard}" class="logo">EventSphere</a>
+        <ul class="nav-links">
+            <li><a th:href="@{/events/all-events}">Browse Events</a></li>
+            <li><a th:href="@{/events/create-event}">Create Event</a></li>
+            <li><a th:href="@{/about-us}">About</a></li>
+            <!--                TODO-->
+            <li><a th:href="@{/dashboard}" class="btn btn-primary" th:text="${user.username}"></a></li>
             </ul>
         </nav>
     </div>
 </header>
 
-<main>
-    <div class="container">
-        <div class="event-header">
-            <div class="event-image">
-                <img src="placeholder-event.jpg" alt="Tech Conference 2025">
-            </div>
-            <div class="event-info">
-                <div class="event-category">Conference</div>
-                <h1>Tech Conference 2025</h1>
-                <div class="event-meta">
-                    <div class="meta-item"><i class="icon-calendar"></i> March 15-17, 2025</div>
-                    <div class="meta-item"><i class="icon-location"></i> Tech Convention Center</div>
-                    <div class="meta-item"><i class="icon-ticket"></i> From $199</div>
+
+<section class="event-header" th:object="${event}" th:style="'background-image: url(' + ${event.eventPicture} + ')'">
+    <div class="event-header-content">
+
+        <div class="container">
+            <span class="event-category-badge" th:text="${#strings.capitalize(#strings.toLowerCase(event.eventType))}">Conference</span>
+            <h1 class="event-title-large" th:text="${event.name}"></h1>
+            <div class="event-meta">
+                <div class="event-meta-item">
+                    <span th:text="${'📅'+ #temporals.format(event.dateAndTime, 'MMM dd YYY HH:mm')}"></span>
                 </div>
-                <button class="btn-primary">Get Tickets</button>
+                <div class="event-meta-item">
+                    <span th:text="${'📍' + event.venue.name}"></span>
+                </div>
             </div>
         </div>
+    </div>
+</section>
 
-        <div class="event-content">
-            <div class="event-details">
-                <h2>About This Event</h2>
-                <p>Join us for the biggest tech conference of the year! Tech Conference 2025 brings together industry leaders, innovators, and tech enthusiasts for three days of inspiring talks, hands-on workshops, and networking opportunities.</p>
+<div class="container">
+    <div class="event-details-layout">
 
-                <h2>What to Expect</h2>
-                <ul>
-                    <li>Keynote speeches from industry leaders</li>
-                    <li>Interactive workshops and training sessions</li>
-                    <li>Networking events and social gatherings</li>
-                    <li>Product exhibitions and demonstrations</li>
-                    <li>Career opportunities and job fair</li>
-                </ul>
+        <div class="event-main-content">
 
-                <h2>Schedule</h2>
-                <div class="schedule">
-                    <div class="day">
-                        <h3>Day 1 - March 15</h3>
-                        <div class="schedule-item">
-                            <div class="time">9:00 AM - 10:00 AM</div>
-                            <div class="session">
-                                <h4>Opening Keynote</h4>
-                                <p>Main Hall</p>
-                            </div>
+            <section class="event-info-section">
+                <h2 class="section-heading">About This Event</h2>
+                <div class="event-description" th:text="${event.description}"></div>
+            </section>
+
+<!--             TODO future update-->
+
+<!--                <div class="event-highlights">-->
+<!--                    <h3 class="section-heading">Event Highlights</h3>-->
+<!--                    <ul class="highlights-list">-->
+<!--                        <li>Keynote speeches by industry leaders and visionaries</li>-->
+<!--                        <li>Panel discussions on cutting-edge technologies and trends</li>-->
+<!--                        <li>Interactive workshops and hands-on demonstrations</li>-->
+<!--                        <li>Networking opportunities with peers and potential collaborators</li>-->
+<!--                        <li>Exhibition area showcasing the latest products and innovations</li>-->
+<!--                        <li>Exclusive access to pre-release technology previews</li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+
+<!--      TODO future update-->
+
+<!--                <div class="event-agenda">-->
+<!--                    <h3 class="section-heading">Event Agenda</h3>-->
+
+<!--                    <div class="agenda-item">-->
+<!--                        <div class="agenda-time">🕒 9:00 AM - 10:00 AM</div>-->
+<!--                        <h4 class="agenda-title"></h4>-->
+<!--                        <p></p>-->
+<!--                    </div>-->
+<!--                    -->
+<!--                <div class="speakers-section">-->
+<!--                    <h3 class="section-heading">Featured Speakers/Artists</h3>-->
+<!--                    <div class="speakers-grid">-->
+<!--                        <div class="speaker-card">-->
+<!--                            <div class="speaker-image"></div>-->
+<!--                            <h4 class="speaker-name"></h4>-->
+<!--                            <p class="speaker-position"></p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+
+
+            <section class="reviews-section event-info-section">
+                <h3 class="section-heading">Attendee Reviews</h3>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-avatar"></div>
+                        <div class="reviewer-info">
+                            <span class="reviewer-name">Michael T.</span>
+                            <span class="review-date">March 26, 2024</span>
                         </div>
-                        <div class="schedule-item">
-                            <div class="time">10:30 AM - 12:00 PM</div>
-                            <div class="session">
-                                <h4>Future of AI Panel Discussion</h4>
-                                <p>Room A</p>
-                            </div>
-                        </div>
-                        <!-- More schedule items -->
                     </div>
-                    <!-- More days -->
-                </div>
-            </div>
-
-            <div class="event-sidebar">
-                <div class="widget venue-info">
-                    <h3>Venue Information</h3>
-                    <p>Tech Convention Center</p>
-                    <p>123 Innovation Drive</p>
-                    <p>San Francisco, CA 94103</p>
-                    <div class="map-placeholder">Map will be displayed here</div>
+                    <div class="rating">★★★★★</div>
+                    <p>Last year's was incredible! Can't wait for this year's event.</p>
                 </div>
 
-                <div class="widget organizer-info">
-                    <h3>Organizer</h3>
-                    <div class="organizer">
-                        <img src="organizer-logo.jpg" alt="TechEvents Inc">
-                        <div>
-                            <h4>TechEvents Inc</h4>
-                            <p>Leading technology conference organizer</p>
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-avatar"></div>
+                        <div class="reviewer-info">
+                            <span class="reviewer-name">Gosho ot pochivka</span>
+                            <span class="review-date">March 27, 2024</span>
                         </div>
+                    </div>
+                    <div class="rating">★★★★☆</div>
+                    <p>Aideeeee.</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-avatar"></div>
+                        <div class="reviewer-info">
+                            <span class="reviewer-name">Robert L.</span>
+                            <span class="review-date">March 25, 2024</span>
+                        </div>
+                    </div>
+                    <div class="rating">★★★★★</div>
+                    <p>It was great!!!</p>
+                </div>
+            </section>
+        </div>
+
+        <div class="event-sidebar">
+            <div class="event-card-sidebar">
+                <div class="sidebar-section ticket-info">
+                    <div class="price-tag" th:text="${'€'+event.price}">€149.99</div>
+                    <div class="ticket-meta">
+                        <span>Standard Admission</span>
+                        <span class="remaining-tickets" th:text="${event.availableTickets + ' tickets left'}">87 tickets left</span>
+                    </div>
+                    <a th:href="@{'/tickets/ticket-purchase/' + ${event.id}}" class="btn btn-success btn-lg" style="width: 100%; text-align: center;">Get Tickets</a>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="section-heading">Date & Time</h3>
+                    <p><strong>Date:</strong> March 25, 2025</p>
+                    <p><strong>Time:</strong> 9:00 AM - 5:00 PM</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--gray);">Add to calendar:
+                        <a href="#" style="color: var(--primary);">Google</a> •
+                        <a href="#" style="color: var(--primary);">iCal</a> •
+                        <a href="#" style="color: var(--primary);">Outlook</a>
+                    </p>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="section-heading">Location</h3>
+                    <div class="map-container"></div>
+                    <h4 class="event-location">Digital Convention Center</h4>
+
+                    <p class="location-address">123 Tech Boulevard, Innovation District<br>San Francisco, CA 94103</p>
+                    <a
+                            class="get-directions-btn"
+                            th:href="@{https://www.google.com/maps/search/?api=1&query={address}(address=${event.venue.address})}"
+                            target="_blank"
+                    >
+                        Get Directions
+                    </a>
+                </div>
+
+<!--            &lt;!&ndash; Optional: Embedded Map Placeholder &ndash;&gt;-->
+<!--            <div class="venue-map-preview">-->
+<!--                <img-->
+<!--                        th:src="@{https://maps.googleapis.com/maps/api/staticmap(center=${event.venue.fullAddress},zoom=13,size=400x200,maptype=roadmap)}"-->
+<!--                        alt="Event Venue Location"-->
+<!--                />-->
+<!--            </div>-->
+
+                <div class="sidebar-section">
+                    <h3 class="section-heading">Share This Event</h3>
+                    <div class="share-buttons">
+                        <a href="#" class="share-btn">f</a>
+                        <a href="#" class="share-btn">t</a>
+                        <a href="#" class="share-btn">in</a>
+                        <a href="#" class="share-btn">✉</a>
                     </div>
                 </div>
 
-                <div class="widget share-event">
-                    <h3>Share This Event</h3>
-                    <div class="social-links">
-                        <a href="#" class="social-icon">Facebook</a>
-                        <a href="#" class="social-icon">Twitter</a>
-                        <a href="#" class="social-icon">LinkedIn</a>
+                <div class="sidebar-section">
+                    <h3 class="section-heading">Organizer</h3>
+                    <div class="organizer-section">
+                        <div class="organizer-logo"></div>
+                        <div class="organizer-info">
+                            <h4 class="organizer-name">TechConnect Events</h4>
+                            <p class="organizer-events">15 events on EventSphere</p>
+                            <a href="#" style="color: var(--primary); font-size: 0.9rem;">View Profile</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</main>
 
+    <!-- Related Events -->
+    <section class="related-events">
+        <h2 class="section-heading">Similar Events You Might Like</h2>
+        <div class="related-events-grid">
+            <!-- Related Event 1 -->
+            <div class="event-card">
+                <div class="event-image" style="background-image: url('/api/placeholder/400/300');"></div>
+                <div class="event-details">
+                    <span class="event-category">Workshop</span>
+                    <h3 class="event-title">AI Development Bootcamp</h3>
+                    <div class="event-info">
+                        <span>📅 April 12, 2025</span>
+                        <span>🕒 10:00 AM - 4:00 PM</span>
+                        <span>📍 Tech Hub Downtown</span>
+                    </div>
+                    <div class="event-footer">
+                        <span class="event-price">€99.99</span>
+                        <a href="event-details.html" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Event 2 -->
+            <div class="event-card">
+                <div class="event-image" style="background-image: url('/api/placeholder/400/300');"></div>
+                <div class="event-details">
+                    <span class="event-category">Conference</span>
+                    <h3 class="event-title">Blockchain Revolution Forum</h3>
+                    <div class="event-info">
+                        <span>📅 May 8, 2025</span>
+                        <span>🕒 9:00 AM - 6:00 PM</span>
+                        <span>📍 Finance District Conference Hall</span>
+                    </div>
+                    <div class="event-footer">
+                        <span class="event-price">€129.99</span>
+                        <a href="event-details.html" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Event 3 -->
+            <div class="event-card">
+                <div class="event-image" style="background-image: url('/api/placeholder/400/300');"></div>
+                <div class="event-details">
+                    <span class="event-category">Networking</span>
+                    <h3 class="event-title">Tech Startup Mixer</h3>
+                    <div class="event-info">
+                        <span>📅 April 3, 2025</span>
+                        <span>🕒 6:00 PM - 9:00 PM</span>
+                        <span>📍 Urban Lounge & Co-working Space</span>
+                    </div>
+                    <div class="event-footer">
+                        <span class="event-price">€29.99</span>
+                        <a href="event-details.html" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Footer -->
 <footer>
     <div class="container">
         <div class="footer-content">
-            <div class="footer-section about">
+            <div class="footer-column">
                 <h3>EventSphere</h3>
-                <p>Your one-stop platform for discovering and managing events.</p>
-            </div>
-            <div class="footer-section links">
-                <h3>Quick Links</h3>
                 <ul>
                     <li><a href="about.html">About Us</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
-                    <li><a href="terms.html">Terms & Conditions</a></li>
-                    <li><a href="privacy.html">Privacy Policy</a></li>
-                </ul>
-            </div>
-            <div class="footer-section contact">
-                <h3>Contact Us</h3>
-                <p><i class="icon-email"></i> support@eventsphere.com</p>
-                <p><i class="icon-phone"></i> (123) 456-7890</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 EventSphere. All rights reserved.</p>
-        </div>
-    </div>
-</footer>
-</body>
-</html>

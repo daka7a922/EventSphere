@@ -6,10 +6,12 @@ import com.github.daka7a922.eventsphere.event.repository.EventRepository;
 import com.github.daka7a922.eventsphere.web.dto.CreateEventRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -34,6 +36,7 @@ public class EventService {
                 .price(createEventRequest.getPrice())
                 .availableTickets(createEventRequest.getAvailableTickets())
                 .venue(createEventRequest.getVenue())
+                .isFeatured(false)
                 .build();
 
 
@@ -54,5 +57,17 @@ public class EventService {
 
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
+    }
+
+    public void changeEventFeatured(Event event, boolean isFeatured){
+
+        event.setFeatured(isFeatured);
+        eventRepository.save(event);
+
+    }
+
+    public List<Event> getFeaturedEvents(){
+
+        return eventRepository.findAll().stream().filter(event -> event.isFeatured()).collect(Collectors.toList());
     }
 }

@@ -123,4 +123,15 @@ public class UserService implements UserDetailsService {
     public List<User> getAllUsers() {
        return userRepository.findAll();
     }
+
+    public void updateRole(User user, UserRole userRole) {
+
+        if (userRole == UserRole.ADMIN) {
+            user.setRole(UserRole.ADMIN);
+        }else {
+            user.setRole(UserRole.EVENT_ORGANIZER);
+        }
+
+        userRepository.save(user);
+    }
 }
