@@ -27,6 +27,8 @@ public class Venue {
 
     private String country;
 
+    private int capacity;
+
     private String description;
 
     @Enumerated(EnumType.STRING)
