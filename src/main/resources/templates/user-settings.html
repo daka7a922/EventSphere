@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/css/user-settings.css">
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <title>EventSphere - Settings</title>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <nav>
+      <a th:href="@{/}" class="logo">EventSphere</a>
+      <ul class="nav-links">
+        <li><a th:href="@{/events/all-events}">Browse Events</a></li>
+        <li><a th:href="@{/create-event}">Create Event</a></li>
+        <li><a th:href="@{/about-us}">About</a></li>
+        <li><a th:href="@{/dashboard}" class="btn btn-primary" th:text="${user.username}"></a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+<div class="container">
+  <div class="dashboard-layout" th:object="${user}">
+
+    <div class="dashboard-sidebar">
+      <div class="user-profile">
+        <img th:src="${#strings.isEmpty(user.profilePicture) ? 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png' : user.profilePicture}" alt="Profile Picture" class="user-avatar">
+        <h3 class="user-name" th:text="${user.username}"></h3>
+        <p class="user-email" th:text = "${#strings.isEmpty(user.email) ? 'Edit your profile and add email' : user.email}"></p>
+<!--        <a th:href="@{'/users/'+ ${user.id} +'/user-settings'}" class="btn btn-primary">Edit Profile</a>-->
+      </div>
+
+      <ul class="nav-menu">
+        <li th:class="${activePage == 'dashboard' ? 'active' : ''}">
+          <a th:href="@{/dashboard}"><span class="nav-icon">📊</span> Dashboard</a>
+        </li>
+        <li th:class="${activePage == 'my-tickets' ? 'active' : ''}">
+          <a th:href="@{/my-tickets}"><span class="nav-icon">🎟️</span> My Tickets</a>
+        </li>
+        <li th:class="${activePage == 'saved-events' ? 'active' : ''}">
+          <a th:href="@{/saved-events}"><span class="nav-icon">❤️</span> Saved Events</a>
+        </li>
+        <li th:class="${activePage == 'purchase-history' ? 'active' : ''}">
+          <a th:href="@{/purchase-history}"><span class="nav-icon">💰</span> Purchase History</a>
+        </li>
+        <li th:class="${activePage == 'notifications' ? 'active' : ''}">
+          <a th:href="@{/notifications}"><span class="nav-icon">🔔</span> Notifications</a>
+        </li>
+        <li th:class="${activePage == 'user-settings' ? 'active' : ''}">
+          <a th:href="@{/user-settings}"><span class="nav-icon">⚙️</span> Settings</a>
+        </li>
+        <li th:if="${user.role.name() == 'ADMIN'}" th:class="${activePage == 'venue-management' ? 'active' : ''}">
+          <a th:href="@{/venue/venue-management}"><span class="nav-icon">🏢</span> Venue Management</a>
+        </li>
+        <li th:if="${user.role.name() == 'ADMIN'}" th:class="${activePage == 'user-management' ? 'active' : ''}">
+          <a th:href="@{/users/user-management}"><span class="nav-icon">👥</span> User Management</a>
+        </li>
+        <li th:class="${activePage == 'logout' ? 'active' : ''}">
+          <a th:href="@{/logout}"><span class="nav-icon">🚪</span> Logout</a>
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="dashboard-main">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Account Settings</h2>
+        </div>
+        <div class="card-body">
+
+          <div class="settings-tabs">
+            <div class="tab-item active">Profile</div>
+
+<!--     TODO FUTURE <div class="tab-item">Notifications</div>-->
+<!--            <div class="tab-item">Privacy</div>-->
+<!--            <div class="tab-item">Payment Methods</div>-->
+<!--            <div class="tab-item">Connected Accounts</div>-->
+          </div>
+
+
+          <form class="form-section" th:action="@{'/users/' + ${user.id} + '/user-settings'}" th:method="PUT" th:object="${userEditRequest}">
+            <h3 class="section-title">Personal Information</h3>
+            <div class="form-group">
+              <label class="form-label">First Name</label>
+              <input type="text" class= form-input th:placeholder="${user.firstName != null ? user.firstName : 'Enter first name'}"  th:field="*{firstName}" th:value="${user.firstName}">
+              <p class="alert-warning" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name</label>
+              <input type="text" class="form-input"  th:placeholder="${user.lastName != null ? user.lastName : 'Enter last name'}"  th:field="*{lastName}">
+              <p class="alert-warning" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-input"  th:placeholder="${user.email != null ? user.email : 'Enter your email address'}"  th:field="*{email}">
+              <p class="alert-warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Profile Picture URL</label>
+              <input type="text" class="form-input"  th:placeholder="${user.profilePicture != null ? user.profilePicture : 'Enter profile picture URL'}"  th:field="*{profilePicture}">
+              <p class="alert-warning" th:if="${#fields.hasErrors('profilePicture')}" th:errors="*{profilePicture}"></p>
+            </div>
+            <button class="btn btn-primary">Save Changes</button>
+          </form>
+
+          <!-- TODO in future update -->
+
+<!--          <div class="form-section">-->
+<!--            <h3 class="section-title">Change Password</h3>-->
+<!--            <div class="form-group">-->
+<!--              <label class="form-label">Current Password</label>-->
+<!--              <input type="password" class="form-input" placeholder="Enter current password">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--              <label class="form-label">New Password</label>-->
+<!--              <input type="password" class="form-input" placeholder="Enter new password">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--              <label class="form-label">Confirm New Password</label>-->
+<!--              <input type="password" class="form-input" placeholder="Confirm new password">-->
+<!--            </div>-->
+<!--            <button class="btn btn-primary">Update Password</button>-->
+<!--          </div>-->
+
+          <div class="danger-zone">
+            <h3 class="danger-zone-title">Danger Zone</h3>
+            <div class="danger-item">
+              <div class="danger-item-title">Deactivate Account</div>
+              <div class="danger-item-description">Temporarily disable your account. You can reactivate it anytime by logging in.</div>
+              <button class="btn btn-danger">Deactivate Account</button>
+            </div>
+            <div class="danger-item">
+              <div class="danger-item-title">Delete Account</div>
+              <div class="danger-item-description">Permanently delete your account and all associated data. This action cannot be undone.</div>
+              <button class="btn btn-danger">Delete Account</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>EventSphere</h3>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+<!--          <li><a href="contact.html">Contact Us</a></li>-->
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>For Attendees</h3>
+        <ul>
+          <li><a href="events.html">Browse Events</a></li>
+          <li><a href="tickets.html">My Tickets</a></li>
+          <li><a href="faq.html">FAQs</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>For Organizers</h3>
+        <ul>
+          <li><a href="create-event.html">Create Event</a></li>
+<!--          <li><a href="pricing.html">Pricing</a></li>-->
+<!--          <li><a href="resources.html">Resources</a></li>-->
+<!--          <li><a href="success-stories.html">Success Stories</a></li>-->
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="terms.html">Terms of Service</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>&copy; 2025 EventSphere. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
