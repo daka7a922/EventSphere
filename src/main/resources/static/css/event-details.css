@@ -403,7 +403,7 @@ nav {
     height: 80px;
     border-radius: 10px;
     background-color: #ddd;
-    background-image: url('/api/placeholder/100/100');
+    background-image: url('static/images/logo.png');
     background-size: cover;
     background-position: center;
 }
