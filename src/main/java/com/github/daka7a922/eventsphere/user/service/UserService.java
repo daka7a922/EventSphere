@@ -134,4 +134,17 @@ public class UserService implements UserDetailsService {
 
         userRepository.save(user);
     }
+
+
+    public void changeUserRole(UUID id, String role) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new DomainException("User not found with ID: " + id));
+
+        user.setRole(UserRole.valueOf(role));
+        userRepository.save(user);
+
+    }
+
+
 }
