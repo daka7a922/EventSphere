@@ -141,28 +141,33 @@
                         <span class="remaining-tickets" th:text="${event.availableTickets + ' tickets left'}">87 tickets left</span>
                     </div>
                     <a th:href="@{'/tickets/ticket-purchase/' + ${event.id}}" class="btn btn-success btn-lg" style="width: 100%; text-align: center;">Get Tickets</a>
+                    <form th:action="@{'/users/save-event/' + ${event.id}}" method="post" style="width: 100%;">
+                        <input type="hidden" name="_method" value="PUT" />
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <input type="submit" value="Save Event" class="btn btn-success btn-lg" style="width: 100%; text-align: center;" />
+                    </form>
+
                 </div>
 
                 <div class="sidebar-section">
                     <h3 class="section-heading">Date & Time</h3>
-                    <p><strong>Date:</strong> March 25, 2025</p>
-                    <p><strong>Time:</strong> 9:00 AM - 5:00 PM</p>
+                    <p ><strong >Date: </strong><span th:text="${#temporals.format(event.dateAndTime, 'MMM dd YYY')}"></span></p>
+                    <p><strong>Time: </strong><span th:text="${#temporals.format(event.dateAndTime, 'HH:mm') + ' PM'}"></span></p>
                     <p style="margin-top: 10px; font-size: 0.9rem; color: var(--gray);">Add to calendar:
-                        <a href="#" style="color: var(--primary);">Google</a> •
-                        <a href="#" style="color: var(--primary);">iCal</a> •
-                        <a href="#" style="color: var(--primary);">Outlook</a>
+                        <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=My%20Event&dates=20250401T090000/20250401T100000&details=Event%20description%20here&location=Event%20location" style="color: var(--primary);">Google</a> •
                     </p>
                 </div>
 
                 <div class="sidebar-section">
                     <h3 class="section-heading">Location</h3>
                     <div class="map-container"></div>
-                    <h4 class="event-location">Digital Convention Center</h4>
+                    <h4 class="event-location" th:text="${event.venue.name}">Digital Convention Center</h4>
 
-                    <p class="location-address">123 Tech Boulevard, Innovation District<br>San Francisco, CA 94103</p>
+                    <p class="location-address" th:text="${event.venue.address}">123 Tech Boulevard, Innovation District<br></p>
+                    <p class="location-address" th:text="${event.venue.city}"></p>
                     <a
                             class="get-directions-btn"
-                            th:href="@{https://www.google.com/maps/search/?api=1&query={address}(address=${event.venue.address})}"
+                            th:href="${'https://www.google.com/maps/search/?api=1&query=' + #uris.escapeQueryParam(event.venue.address + ', ' + event.venue.city)}"
                             target="_blank"
                     >
                         Get Directions
@@ -192,9 +197,9 @@
                     <div class="organizer-section">
                         <div class="organizer-logo"></div>
                         <div class="organizer-info">
-                            <h4 class="organizer-name">TechConnect Events</h4>
-                            <p class="organizer-events">15 events on EventSphere</p>
-                            <a href="#" style="color: var(--primary); font-size: 0.9rem;">View Profile</a>
+                            <h4 class="organizer-name">EventSphere Ltd.</h4>
+<!--                            <p class="organizer-events">15 events on EventSphere</p>-->
+<!--                            <a href="#" style="color: var(&#45;&#45;primary); font-size: 0.9rem;">View Profile</a>-->
                         </div>
                     </div>
                 </div>
