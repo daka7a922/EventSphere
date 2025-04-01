@@ -5,54 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/css/dashboard.css">
     <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/venue-management.css">
     <title>EventSphere - Venue Management</title>
-    <style>
 
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        .data-table th {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-            background-color: rgba(78, 84, 200, 0.1);
-        }
-
-        .data-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .data-table tr:hover {
-            background-color: rgba(78, 84, 200, 0.05);
-        }
-
-        .venue-type-badge {
-            display: inline-block;
-            padding: 3px 8px;
-            background-color: rgba(78, 84, 200, 0.1);
-            color: #4e54c8;
-            font-size: 0.8rem;
-            border-radius: 15px;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-danger {
-            background-color: #dc3545;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background-color: #bd2130;
-        }
-    </style>
 </head>
 <body>
 
@@ -94,7 +49,7 @@
                     <a th:href="@{/my-tickets}"><span class="nav-icon">🎟️</span> My Tickets</a>
                 </li>
                 <li th:class="${activePage == 'saved-events' ? 'active' : ''}">
-                    <a th:href="@{/saved-events}"><span class="nav-icon">❤️</span> Saved Events</a>
+                    <a th:href="@{users/saved-events}"><span class="nav-icon">❤️</span> Saved Events</a>
                 </li>
                 <li th:class="${activePage == 'purchase-history' ? 'active' : ''}">
                     <a th:href="@{/purchase-history}"><span class="nav-icon">💰</span> Purchase History</a>
