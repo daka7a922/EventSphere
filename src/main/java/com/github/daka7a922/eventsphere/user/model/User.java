@@ -44,6 +44,9 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER)
     private List<Event> events = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Event> savedEvents = new ArrayList<>();
+
     @Column(nullable = false)
     private LocalDateTime createdOn;
 
