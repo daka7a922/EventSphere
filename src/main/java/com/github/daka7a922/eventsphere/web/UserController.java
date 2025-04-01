@@ -1,5 +1,7 @@
 package com.github.daka7a922.eventsphere.web;
 
+import com.github.daka7a922.eventsphere.event.model.Event;
+import com.github.daka7a922.eventsphere.event.service.EventService;
 import com.github.daka7a922.eventsphere.security.AuthenticationDetails;
 import com.github.daka7a922.eventsphere.user.model.User;
 import com.github.daka7a922.eventsphere.user.service.UserService;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,9 +23,11 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
+    private final EventService eventService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, EventService eventService) {
         this.userService = userService;
+        this.eventService = eventService;
     }
 
     @GetMapping("/{id}/user-settings")
@@ -80,6 +85,32 @@ public class UserController {
         userService.changeUserRole(id, role);
 
         return "redirect:/users/user-management";
+    }
+
+    @PutMapping("/save-event/{id}")
+    public String saveEvent(@PathVariable("id") UUID id, @AuthenticationPrincipal AuthenticationDetails userDetails) {
+
+        User user = userService.getByUsername(userDetails.getUsername());
+
+        Event event = eventService.getById(id);
+
+        user.getSavedEvents().add(event);
+
+        userService.save(user);
+
+        return "redirect:/events/event-details/" + event.getId();
+    }
+
+    @GetMapping("/saved-events")
+    public ModelAndView getSavedEvents(@AuthenticationPrincipal AuthenticationDetails userDetails){
+
+        User user = userService.getByUsername(userDetails.getUsername());
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("saved-events");
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("activePage", "saved-events");
+        return modelAndView;
     }
 
 
