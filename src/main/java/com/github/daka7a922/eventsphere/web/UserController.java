@@ -106,9 +106,12 @@ public class UserController {
 
         User user = userService.getByUsername(userDetails.getUsername());
 
+        List<Event> savedEvents = user.getSavedEvents();
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("saved-events");
         modelAndView.addObject("user", user);
+        modelAndView.addObject("savedEvents", savedEvents);
         modelAndView.addObject("activePage", "saved-events");
         return modelAndView;
     }
