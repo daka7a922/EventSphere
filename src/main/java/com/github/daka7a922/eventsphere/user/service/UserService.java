@@ -1,5 +1,6 @@
 package com.github.daka7a922.eventsphere.user.service;
 
+import com.github.daka7a922.eventsphere.event.model.Event;
 import com.github.daka7a922.eventsphere.exception.DomainException;
 import com.github.daka7a922.eventsphere.security.AuthenticationDetails;
 import com.github.daka7a922.eventsphere.user.model.User;
@@ -146,5 +147,8 @@ public class UserService implements UserDetailsService {
 
     }
 
+    public void save(User user) {
 
+        userRepository.save(user);
+    }
 }
