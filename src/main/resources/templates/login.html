@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,9 +15,16 @@
         <nav>
             <a th:href="@{/}" class="logo">EventSphere</a>
             <ul class="nav-links">
-                <li><a th:href="@{/all-events}">Browse Events</a></li>
-                <li><a th:href="@{/about-us}">About</a></li>
-                <li><a th:href="@{/register}">Register</a></li>
+                <li><a th:href="@{/events/all-events}">Browse Events</a></li>
+                <li><a th:href="@{/create-event.html}">Create Event</a></li>
+                <li><a th:href="@{/about-us.html}">About</a></li>
+                <li sec:authorize="isAnonymous()">
+                    <a th:href="@{/login}" class="btn btn-primary">Login</a>
+                </li>
+
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/dashboard}" class="btn btn-primary">Account</a>
+                </li>
             </ul>
         </nav>
     </div>
