@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/css/user-management.css">
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <title>User Management - EventSphere</title>
+
+</head>
+<body>
+<header>
+  <div class="container">
+    <nav>
+      <a th:href="@{/}" class="logo">EventSphere</a>
+      <ul class="nav-links">
+        <li><a th:href="@{/events/all-events}">Browse Events</a></li>
+        <li><a th:href="@{/create-event.html}">Create Event</a></li>
+        <li><a th:href="@{/about-us.html}">About</a></li>
+        <li sec:authorize="isAnonymous()">
+          <a th:href="@{/login}" class="btn btn-primary">Login</a>
+        </li>
+
+        <li sec:authorize="isAuthenticated()">
+          <a th:href="@{/dashboard}" class="btn btn-primary">Account</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="container" th:object="${user}">
+  <div class="dashboard-layout">
+    <div class="dashboard-sidebar">
+      <div class="user-profile">
+        <img th:src="${#strings.isEmpty(user.profilePicture) ? 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png' : user.profilePicture}" alt="Profile Picture" class="user-avatar">
+        <h3 class="user-name" th:text="${user.username}"></h3>
+        <p class="user-email" th:text = "${#strings.isEmpty(user.email) ? 'Edit your profile and add email' : user.email}"></p>
+        <a th:href="@{'/users/'+ ${user.id} +'/user-settings'}" class="btn btn-primary">Edit Profile</a>
+      </div>
+
+      <ul class="nav-menu">
+        <li th:class="${activePage == 'dashboard' ? 'active' : ''}">
+          <a th:href="@{/dashboard}"><span class="nav-icon">📊</span> Dashboard</a>
+        </li>
+        <li th:class="${activePage == 'my-tickets' ? 'active' : ''}">
+          <a th:href="@{/my-tickets}"><span class="nav-icon">🎟️</span> My Tickets</a>
+        </li>
+        <li th:class="${activePage == 'saved-events' ? 'active' : ''}">
+          <a th:href="@{/saved-events}"><span class="nav-icon">❤️</span> Saved Events</a>
+        </li>
+        <li th:class="${activePage == 'purchase-history' ? 'active' : ''}">
+          <a th:href="@{/purchase-history}"><span class="nav-icon">💰</span> Purchase History</a>
+        </li>
+        <li th:class="${activePage == 'notifications' ? 'active' : ''}">
+          <a th:href="@{/notifications}"><span class="nav-icon">🔔</span> Notifications</a>
+        </li>
+        <li th:class="${activePage == 'user-settings' ? 'active' : ''}">
+          <a th:href="@{'/users/'+ ${user.id} +'/user-settings'}"><span class="nav-icon">⚙️</span> Settings</a>
+        </li>
+        <li th:if="${user.role.name() == 'ADMIN'}" th:class="${activePage == 'venue-management' ? 'active' : ''}">
+          <a th:href="@{/venue/venue-management}"><span class="nav-icon">🏢</span> Venue Management</a>
+        </li>
+        <li th:if="${user.role.name() == 'ADMIN'}" th:class="${activePage == 'user-management' ? 'active' : ''}">
+          <a th:href="@{/admin/user-management}"><span class="nav-icon">👥</span> User Management</a>
+        </li>
+        <li th:class="${activePage == 'logout' ? 'active' : ''}">
+          <a th:href="@{/logout}"><span class="nav-icon">🚪</span> Logout</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="dashboard-main">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">User Management</h2>
+          <a href="#" class="btn btn-primary">Add New User</a>
+        </div>
+        <div class="card-body">
+          <div class="filter-bar">
+            <input type="text" class="search-input" placeholder="Search users...">
+            <select class="filter-select">
+              <option value="">All Roles</option>
+              <option value="admin">Admin</option>
+              <option value="organizer">Organizer</option>
+              <option value="attendee">Attendee</option>
+            </select>
+            <select class="filter-select">
+              <option value="">All Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+
+          <table>
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each=" user : ${allUsers}">
+              <td th:text="${user.id}">2</td>
+              <td th:text="${user.username}">janesmith</td>
+              <td th:text="${#strings.capitalize(#strings.toLowerCase(user.role))}">Organizer</td>
+              <td><span class="status-badge status-active" th:text="${user.active}">Active</span></td>
+              <td class="action-buttons">
+                <form th:action="@{/users/{id}/role(id=${user.id})}" th:method="put" style="display:inline;">
+                  <select name="role" onchange="this.form.submit()" style="padding: 5px; border-radius: 20px; border: 1px solid #ddd; background-color: var(--warning); color: white; cursor: pointer;">
+                    <option value="" disabled selected>Change Role</option>
+                    <option value="ADMIN">Admin</option>
+                    <option value="USER">User</option>
+                    <option value="EVENT_ORGANIZER">Event Organizer</option>
+                  </select>
+                </form>
+
+                <form th:action="@{/users/{id}(id=${user.id})}" th:method="delete" style="display:inline;">
+                  <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <ul class="pagination">
+            <li><a href="#">&laquo;</a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">&raquo;</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>EventSphere</h3>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Our Team</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Services</h3>
+        <ul>
+          <li><a href="#">Event Planning</a></li>
+          <li><a href="#">Venue Booking</a></li>
+          <li><a href="#">Ticket Management</a></li>
+          <li><a href="#">Marketing</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">FAQs</a></li>
+          <li><a href="#">Support</a></li>
+          <li><a href="#">Documentation</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+          <li><a href="#">GDPR Compliance</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">
+      &copy; 2025 EventSphere. All rights reserved.
+    </div>
+  </div>
+</footer>
+</body>
+</html>
