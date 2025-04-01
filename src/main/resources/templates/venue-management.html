@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/dashboard.css">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <title>EventSphere - Venue Management</title>
+    <style>
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .data-table th {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            background-color: rgba(78, 84, 200, 0.1);
+        }
+
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table tr:hover {
+            background-color: rgba(78, 84, 200, 0.05);
+        }
+
+        .venue-type-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: rgba(78, 84, 200, 0.1);
+            color: #4e54c8;
+            font-size: 0.8rem;
+            border-radius: 15px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #bd2130;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <nav>
+            <a th:href="@{/}" class="logo">EventSphere</a>
+            <ul class="nav-links">
+                <li><a th:href="@{/events/all-events}">Browse Events</a></li>
+                <li><a th:href="@{/create-event.html}">Create Event</a></li>
+                <li><a th:href="@{/about-us.html}">About</a></li>
+                <li sec:authorize="isAnonymous()">
+                    <a th:href="@{/login}" class="btn btn-primary">Login</a>
+                </li>
+
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/dashboard}" class="btn btn-primary">Account</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="container" th:object="${user}">
+    <div class="dashboard-layout">
+        <div class="dashboard-sidebar">
+            <div class="user-profile">
+                <img th:src="${#strings.isEmpty(user.profilePicture) ? 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png' : user.profilePicture}" alt="Profile Picture" class="user-avatar">
+                <h3 class="user-name" th:text="${user.username}"></h3>
+                <p class="user-email" th:text = "${#strings.isEmpty(user.email) ? 'Edit your profile and add email' : user.email}"></p>
+                <a th:href="@{'/users/'+ ${user.id} +'/user-settings'}" class="btn btn-primary">Edit Profile</a>
+            </div>
+
+            <ul class="nav-menu">
+                <li th:class="${activePage == 'dashboard' ? 'active' : ''}">
+                    <a th:href="@{/dashboard}"><span class="nav-icon">📊</span> Dashboard</a>
+                </li>
+                <li th:class="${activePage == 'my-tickets' ? 'active' : ''}">
+                    <a th:href="@{/my-tickets}"><span class="nav-icon">🎟️</span> My Tickets</a>
+                </li>
+                <li th:class="${activePage == 'saved-events' ? 'active' : ''}">
+                    <a th:href="@{/saved-events}"><span class="nav-icon">❤️</span> Saved Events</a>
+                </li>
+                <li th:class="${activePage == 'purchase-history' ? 'active' : ''}">
+                    <a th:href="@{/purchase-history}"><span class="nav-icon">💰</span> Purchase History</a>
+                </li>
+                <li th:class="${activePage == 'notifications' ? 'active' : ''}">
+                    <a th:href="@{/notifications}"><span class="nav-icon">🔔</span> Notifications</a>
+                </li>
+                <li th:class="${activePage == 'user-settings' ? 'active' : ''}">
+                    <a th:href="@{'/users/'+ ${user.id} +'/user-settings'}"><span class="nav-icon">⚙️</span> Settings</a>
+                </li>
+                <li th:if="${user.role.name() == 'ADMIN'}" th:class="${activePage == 'venue-management' ? 'active' : ''}">
+                    <a th:href="@{/venue/venue-management}"><span class="nav-icon">🏢</span> Venue Management</a>
+                </li>
+                <li th:if="${user.role.name() == 'ADMIN'}" th:class="${activePage == 'user-management' ? 'active' : ''}">
+                    <a th:href="@{/users/user-management}"><span class="nav-icon">👥</span> User Management</a>
+                </li>
+                <li th:class="${activePage == 'logout' ? 'active' : ''}">
+                    <a th:href="@{/logout}"><span class="nav-icon">🚪</span> Logout</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="dashboard-main">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Venue Management</h2>
+                    <a th:href="@{/venue/add-venue}" class="btn btn-primary">Add New Venue</a>
+                </div>
+                <div class="card-body">
+                    <div class="tabs">
+                        <div class="tab-item active">All Venues</div>
+<!--                        <div class="tab-item">My Venues</div>-->
+                    </div>
+
+<!--                    TODO implement the search-->
+
+<!--                    <div class="filter-bar">-->
+<!--                        <input type="text" class="search-input" placeholder="Search venues...">-->
+<!--                        <select class="filter-select">-->
+<!--                            <option value="">All Types</option>-->
+<!--                            <option value="ARENA">Arena</option>-->
+<!--                            <option value="STADIUM">Stadium</option>-->
+<!--                            <option value="THEATER">Theater</option>-->
+<!--                            <option value="CONCERT_HALL">Concert Hall</option>-->
+<!--                            <option value="CLUB">Club</option>-->
+<!--                        </select>-->
+<!--                        <select class="filter-select">-->
+<!--                            <option value="">Sort By: Name</option>-->
+<!--                            <option value="capacity">Sort By: Capacity</option>-->
+<!--                            <option value="location">Sort By: Location</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+
+                    <table class="data-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>City</th>
+                            <th>Type</th>
+                            <th>Capacity</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each = "venue : ${allVenues}">
+                            <td th:text="${venue.id}">1</td>
+                            <td th:text="${venue.name}"></td>
+                            <td th:text="${venue.city}"></td>
+                            <td><span class="venue-type-badge" th:text="${venue.type}"></span></td>
+                            <td th:text="${venue.capacity}"></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="#" class="btn btn-info">View Events</a>
+                                    <a href="#" class="btn btn-primary">Edit</a>
+                                    <a href="#" class="btn btn-danger">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+<!--                scrapped for now PAGINATION -->
+<!--                    <ul class="pagination">-->
+<!--                        <li><a href="#">&laquo;</a></li>-->
+<!--                        <li class="active"><a href="#">1</a></li>-->
+<!--                        <li><a href="#">2</a></li>-->
+<!--                        <li><a href="#">3</a></li>-->
+<!--                        <li><a href="#">&raquo;</a></li>-->
+<!--                    </ul>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
