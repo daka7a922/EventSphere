@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventSphere - My Tickets</title>
+    <style>
+        :root {
+            --primary: #4e54c8;
+            --primary-dark: #363795;
+            --secondary: #ff4081;
+            --light: #f5f5f5;
+            --dark: #333;
+            --gray: #777;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(to right, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #e03070;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-info {
+            background-color: var(--info);
+            color: white;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+
+        .btn-sm {
+            padding: 0.25rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        /* Sidebar */
+        .dashboard-sidebar {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+            height: fit-content;
+        }
+
+        .user-profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #ddd;
+            background-image: url('/api/placeholder/200/200');
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 15px;
+        }
+
+        .user-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .user-email {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-menu li a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .nav-menu li a:hover {
+            background-color: rgba(78, 84, 200, 0.1);
+            color: var(--primary);
+        }
+
+        .nav-menu li.active a {
+            background-color: rgba(78, 84, 200, 0.2);
+            color: var(--primary);
+            font-weight: 500;
+            border-left: 3px solid var(--primary);
+        }
+
+        .nav-icon {
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .dashboard-main {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin: 0;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .tab-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-item:hover {
+            color: var(--primary);
+        }
+
+        .tab-item.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Search & Filter */
+        .filter-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            min-width: 200px;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            min-width: 150px;
+        }
+
+        /* Ticket Cards */
+        .ticket-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .ticket-card {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+        }
+
+        .ticket-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .ticket-header {
+            position: relative;
+            padding-top: 56.25%; /* 16:9 aspect ratio */
+            background-size: cover;
+            background-position: center;
+            background-color: #ddd;
+        }
+
+        .ticket-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: var(--success);
+        }
+
+        .status-past {
+            background-color: rgba(108, 117, 125, 0.2);
+            color: var(--gray);
+        }
+
+        .status-canceled {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: var(--danger);
+        }
+
+        .ticket-date {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            padding: 15px;
+        }
+
+        .ticket-body {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ticket-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+        }
+
+        .ticket-venue {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .venue-icon {
+            margin-right: 5px;
+            flex-shrink: 0;
+        }
+
+        .ticket-type {
+            background-color: rgba(78, 84, 200, 0.1);
+            color: var(--primary);
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+
+        .ticket-footer {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ticket-price {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .empty-text {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin-top: 30px;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .pagination a:hover {
+            background-color: rgba(78, 84, 200, 0.1);
+            color: var(--primary);
+        }
+
+        .pagination li.active a {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-column a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .ticket-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header>
+    <div class="container">
+        <nav>
+            <a href="index.html" class="logo">EventSphere</a>
+            <ul class="nav-links">
+                <li><a href="events.html">Browse Events</a></li>
+                <li><a href="create-event.html">Create Event</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="#" class="btn btn-primary">Account</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- Dashboard Content -->
+<div class="container">
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <div class="dashboard-sidebar">
+            <div class="user-profile">
+                <div class="user-avatar"></div>
+                <h3 class="user-name">John Doe</h3>
+                <p class="user-email">john.doe@example.com</p>
+                <a href="edit-profile.html" class="btn btn-primary">Edit Profile</a>
+            </div>
+
+            <ul class="nav-menu">
+                <li><a href="dashboard.html"><span class="nav-icon">📊</span> Dashboard</a></li>
+                <li class="active"><a href="my-tickets.html"><span class="nav-icon">🎟️</span> My Tickets</a></li>
+                <li><a href="saved-events.html"><span class="nav-icon">❤️</span> Saved Events</a></li>
+                <li><a href="purchase-history.html"><span class="nav-icon">💰</span> Purchase History</a></li>
+                <li><a href="notifications.html"><span class="nav-icon">🔔</span> Notifications</a></li>
+                <li><a href="settings.html"><span class="nav-icon">⚙️</span> Settings</a></li>
+                <li><a href="logout.html"><span class="nav-icon">🚪</span> Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="dashboard-main">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">My Tickets</h2>
+                    <a href="#" class="btn btn-primary btn-sm">Add to Calendar</a>
+                </div>
+                <div class="card-body">
+                    <div class="tabs">
+                        <div class="tab-item active">Upcoming (3)</div>
+                        <div class="tab-item">Past (8)</div>
+                        <div class="tab-item">Canceled (1)</div>
+                        <div class="tab-item">All Tickets (12)</div>
+                    </div>
+
+                    <div class="filter-bar">
+                        <input type="text" class="search-input" placeholder="Search your tickets...">
+                        <select class="filter-select">
+                            <option value="">All Categories</option>
+                            <option value="conference">Conference</option>
+                            <option value="concert">Concert</option>
+                            <option value="workshop">Workshop</option>
+                            <option value="festival">Festival</option>
+                        </select>
+                        <select class="filter-select">
+                            <option value="date-desc">Sort: Newest First</option>
+                            <option value="date-asc">Sort: Oldest First</option>
+                            <option value="price-desc">Sort: Price (High to Low)</option>
+                            <option value="price-asc">Sort: Price (Low to High)</option>
+                        </select>
+                    </div>
+
+                    <div class="ticket-list">
+                        <!-- Ticket 1 -->
+                        <div class="ticket-card">
+                            <div class="ticket-header" style="background-image: url('/api/placeholder/400/250');">
+                                <span class="ticket-status status-active">Upcoming</span>
+                                <div class="ticket-date">March 25, 2025 • 9:00 AM</div>
+                            </div>
+                            <div class="ticket-body">
+                                <h3 class="ticket-title">Tech Innovation Summit 2025</h3>
+                                <div class="ticket-venue">
+                                    <span class="venue-icon">📍</span>
+                                    <span>Digital Convention Center, San Francisco</span>
+                                </div>
+                                <span class="ticket-type">Standard Admission</span>
+                            </div>
+                            <div class="ticket-footer">
+                                <span class="ticket-price">€149.99</span>
+                                <div>
+                                    <a href="view-ticket.html" class="btn btn-primary btn-sm">View Ticket</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ticket 2 -->
+                        <div class="ticket-card">
+                            <div class="ticket-header" style="background-image: url('/api/placeholder/400/250');">
+                                <span class="ticket-status status-active">Upcoming</span>
+                                <div class="ticket-date">April 10, 2025 • 7:00 PM</div>
+                            </div>
+                            <div class="ticket-body">
+                                <h3 class="ticket-title">Summer Music Festival</h3>
+                                <div class="ticket-venue">
+                                    <span class="venue-icon">📍</span>
+                                    <span>Central Park Amphitheater, New York</span>
+                                </div>
+                                <span class="ticket-type">VIP Experience</span>
+                            </div>
+                            <div class="ticket-footer">
+                                <span class="ticket-price">€299.99</span>
+                                <div>
+                                    <a href="view-ticket.html" class="btn btn-primary btn-sm">View Ticket</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ticket 3 -->
+                        <div class="ticket-card">
+                            <div class="ticket-header" style="background-image: url('/api/placeholder/400/250');">
+                                <span class="ticket-status status-active">Upcoming</span>
+                                <div class="ticket-date">April 12, 2025 • 10:00 AM</div>
+                            </div>
+                            <div class="ticket-body">
+                                <h3 class="ticket-title">AI Development Bootcamp</h3>
+                                <div class="ticket-venue">
+                                    <span class="venue-icon">📍</span>
+                                    <span>Tech Hub Downtown, Chicago</span>
+                                </div>
+                                <span class="ticket-type">Workshop Pass</span>
+                            </div>
+                            <div class="ticket-footer">
+                                <span class="ticket-price">€79.99</span>
+                                <div>
+                                    <a href="view-ticket.html" class="btn btn-primary btn-sm">View Ticket</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ticket 4 (Past - would be shown in Past tab) -->
+                        <div class="ticket-card" style="display: none;">
+                            <div class="ticket-header" style="background-image: url('/api/placeholder/400/250');">
+                                <span class="ticket-status status-past">Past</span>
+                                <div class="ticket-date">January 15, 2025 • 1:00 PM</div>
+                            </div>
+                            <div class="ticket-body">
+                                <h3 class="ticket-title">Digital Marketing Conference</h3>
+                                <div class="ticket-venue">
+                                    <span class="venue-icon">📍</span>
+                                    <span>Business Center, Los Angeles</span>
+                                </div>
+                                <span class="ticket-type">Full Access Pass</span>
+                            </div>
+                            <div class="ticket-footer">
+                                <span class="ticket-price">€129.99</span>
+                                <div>
+                                    <a href="view-ticket.html" class="btn btn-primary btn-sm">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ticket 5 (Canceled - would be shown in Canceled tab) -->
+                        <div class="ticket-card" style="display: none;">
+                            <div class="ticket-header" style="background-image: url('/api/placeholder/400/250');">
+                                <span class="ticket-status status-canceled">Canceled</span>
+                                <div class="ticket-date">May 20, 2025 • 6:30 PM</div>
+                            </div>
+                            <div class="ticket-body">
+                                <h3 class="ticket-title">Opera Night: Carmen</h3>
+                                <div class="ticket-venue">
+                                    <span class="venue-icon">📍</span>
+                                    <span>Grand Opera House, Vienna</span>
+                                </div>
+                                <span class="ticket-type">Premium Seating</span>
+                            </div>
+                            <div class="ticket-footer">
+                                <span class="ticket-price">€189.99</span>
+                                <div>
+                                    <a href="refund-details.html" class="btn btn-primary btn-sm">Refund Status</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <ul class="pagination">
+                        <li><a href="#">&laquo;</a></li>
+                        <li class="active"><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>EventSphere</h3>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="careers.html">Careers</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>For Attendees</h3>
+                <ul>
+                    <li><a href="events.html">Browse Events</a></li>
+                    <li><a href="tickets.html">My Tickets</a></li>
+                    <li><a href="faq.html">FAQs</a></li>
+                    <li><a href="refund.html">Refund Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>For Organizers</h3>
+                <ul>
+                    <li><a href="create-event.html">Create Event</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="success-stories.html">Success Stories</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="terms.html">Terms of Service</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="cookies.html">Cookie Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 EventSphere. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
