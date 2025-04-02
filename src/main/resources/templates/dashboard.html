@@ -42,7 +42,7 @@
                     <a th:href="@{/my-tickets}"><span class="nav-icon">🎟️</span> My Tickets</a>
                 </li>
                 <li th:class="${activePage == 'saved-events' ? 'active' : ''}">
-                    <a th:href="@{/saved-events}"><span class="nav-icon">❤️</span> Saved Events</a>
+                    <a th:href="@{users/saved-events}"><span class="nav-icon">❤️</span> Saved Events</a>
                 </li>
                 <li th:class="${activePage == 'purchase-history' ? 'active' : ''}">
                     <a th:href="@{/purchase-history}"><span class="nav-icon">💰</span> Purchase History</a>
@@ -57,7 +57,7 @@
                     <a th:href="@{/venue/venue-management}"><span class="nav-icon">🏢</span> Venue Management</a>
                 </li>
                 <li th:if="${user.role.name() == 'ADMIN'}" th:class="${activePage == 'user-management' ? 'active' : ''}">
-                    <a th:href="@{/admin/user-management}"><span class="nav-icon">👥</span> User Management</a>
+                    <a th:href="@{/users/user-management}"><span class="nav-icon">👥</span> User Management</a>
                 </li>
                 <li th:class="${activePage == 'logout' ? 'active' : ''}">
                     <a th:href="@{/logout}"><span class="nav-icon">🚪</span> Logout</a>
@@ -70,25 +70,25 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <span class="stat-title">Upcoming Events</span>
-                    <span class="stat-value">4</span>
+                    <span class="stat-value">0</span>
                     <span class="stat-description">Events in the next 30 days</span>
                 </div>
 
                 <div class="stat-card">
                     <span class="stat-title">Total Tickets</span>
-                    <span class="stat-value">12</span>
+                    <span class="stat-value">0</span>
                     <span class="stat-description">Across all your events</span>
                 </div>
 
                 <div class="stat-card">
                     <span class="stat-title">Spent on Events</span>
-                    <span class="stat-value">€489</span>
+                    <span class="stat-value">€420</span>
                     <span class="stat-description">In the last 6 months</span>
                 </div>
 
                 <div class="stat-card">
                     <span class="stat-title">Saved Events</span>
-                    <span class="stat-value">8</span>
+                    <span class="stat-value" th:text="${savedEvents.size()}">8</span>
                     <span class="stat-description">Events you've bookmarked</span>
                 </div>
             </div>
@@ -317,4 +317,12 @@
                             <div class="event-time">🕒 6:00 PM - 9:00 PM</div>
                             <div class="event-actions">
                                 <a href="purchase-ticket.html" class="btn btn-success">Get Tickets</a>
-                                <a href="event-details.html" class="btn btn-info">View Details
+                                <a href="event-details.html" class="btn btn-info">View Details </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
