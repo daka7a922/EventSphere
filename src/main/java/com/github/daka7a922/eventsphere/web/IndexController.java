@@ -87,9 +87,12 @@ public class IndexController {
 
         User user = userService.getByUsername(userDetails.getUsername());
 
+        List<Event> savedEvents = user.getSavedEvents();
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("dashboard");
         modelAndView.addObject("user", user);
+        modelAndView.addObject("savedEvents", savedEvents);
         modelAndView.addObject("activePage", "dashboard");
 
         return modelAndView;
