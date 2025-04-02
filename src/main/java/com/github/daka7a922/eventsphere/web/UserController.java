@@ -101,6 +101,22 @@ public class UserController {
         return "redirect:/events/event-details/" + event.getId();
     }
 
+    @DeleteMapping("/saved-event/{id}")
+    public String deleteSavedEvent(@PathVariable("id") UUID id, @AuthenticationPrincipal AuthenticationDetails userDetails) {
+
+        User user = userService.getByUsername(userDetails.getUsername());
+
+        Event event = eventService.getById(id);
+
+        user.getSavedEvents().remove(event);
+
+        userService.save(user);
+
+        return "redirect:/users/saved-events";
+    }
+
+
+
     @GetMapping("/saved-events")
     public ModelAndView getSavedEvents(@AuthenticationPrincipal AuthenticationDetails userDetails){
 
@@ -115,6 +131,8 @@ public class UserController {
         modelAndView.addObject("activePage", "saved-events");
         return modelAndView;
     }
+
+
 
 
 
