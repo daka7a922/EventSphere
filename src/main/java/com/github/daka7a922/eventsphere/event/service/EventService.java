@@ -1,14 +1,17 @@
 package com.github.daka7a922.eventsphere.event.service;
 
+import com.github.daka7a922.eventsphere.client.NotificationServiceClient;
 import com.github.daka7a922.eventsphere.event.model.Event;
 import com.github.daka7a922.eventsphere.event.model.EventType;
 import com.github.daka7a922.eventsphere.event.repository.EventRepository;
 import com.github.daka7a922.eventsphere.web.dto.CreateEventRequest;
+import com.github.daka7a922.eventsphere.web.dto.NotificationLogDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -17,10 +20,12 @@ import java.util.stream.Collectors;
 public class EventService {
 
     private final EventRepository eventRepository;
+    private final NotificationServiceClient notificationClient;
 
     @Autowired
-    public EventService(EventRepository eventRepository) {
+    public EventService(EventRepository eventRepository, NotificationServiceClient notificationClient) {
         this.eventRepository = eventRepository;
+        this.notificationClient = notificationClient;
     }
 
 
@@ -39,8 +44,26 @@ public class EventService {
                 .isFeatured(false)
                 .build();
 
+        eventRepository.save(event);
 
-        return eventRepository.save(event);
+        NotificationLogDto logData = new NotificationLogDto();
+
+        logData.setMessage("New event created: " + event.getName());
+        logData.setRecipient("admin@eventsphere.com");
+        logData.setEventReference("Event id: " + event.getId());
+        logData.setTimestamp(LocalDateTime.now());
+
+        notificationClient.sendNotification(logData)
+                .subscribe( // Subscribe to trigger the call and handle the response/error
+                        response -> System.out.println("Notification log sent successfully. Response ID: " + (response != null ? response.getId() : "N/A")),
+                        error -> System.err.println("Failed to send notification log: " + error.getMessage())
+                );
+
+
+
+
+
+        return event;
 
 
     }
@@ -68,6 +91,22 @@ public class EventService {
 
     public List<Event> getFeaturedEvents(){
 
-        return eventRepository.findAll().stream().filter(event -> event.isFeatured()).collect(Collectors.toList());
+        return eventRepository.findAll().stream().filter(Event::isFeatured).collect(Collectors.toList());
     }
+
+
+    public void retrieveNotifications() {
+        System.out.println("Retrieving all notifications from NotificationService...");
+        notificationClient.getAllNotifications()
+                .collectList() // Gather all results into a List
+                .subscribe(
+                        notificationList -> {
+                            System.out.println("Retrieved " + notificationList.size() + " notification logs:");
+                            notificationList.forEach(log -> System.out.println(" - ID: " + log.getId() + ", Msg: " + log.getMessage()));
+                        },
+                        error -> System.err.println("Failed to retrieve notifications: " + error.getMessage())
+                );
+    }
+
+
 }
