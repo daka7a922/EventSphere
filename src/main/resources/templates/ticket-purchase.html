@@ -4,213 +4,439 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EventSphere - Purchase Tickets</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/ticket-purchase.css}">
+    <style>
+        :root {
+            --primary: #4e54c8;
+            --primary-dark: #363795;
+            --secondary: #ff4081;
+            --light: #f5f5f5;
+            --dark: #333;
+            --gray: #777;
+            --success: #28a745;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .page-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #ddd;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .active .step-number {
+            background-color: var(--primary);
+        }
+
+        .completed .step-number {
+            background-color: var(--success);
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .active .step-label {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background-color: #ddd;
+            position: relative;
+            margin: -15px 0 20px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 33%;
+            background-color: var(--primary);
+        }
+
+        .ticket-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .ticket-option:hover {
+            border-color: var(--primary);
+            background-color: rgba(78, 84, 200, 0.05);
+        }
+
+        .ticket-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(78, 84, 200, 0.1);
+        }
+
+        .ticket-details {
+            flex: 1;
+        }
+
+        .ticket-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .ticket-description {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .ticket-price {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin-right: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #e03070;
+            transform: translateY(-2px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-input {
+            width: 18px;
+            height: 18px;
+        }
+
+        #confirmation {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
+
 <header>
     <div class="container">
         <nav>
-            <div class="logo">Event<span>Sphere</span></div>
+            <a th:href="@{/dashboard}" class="logo">EventSphere</a>
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="browse-events.html">Browse Events</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="signup.html" class="btn-primary">Sign Up</a></li>
+                <li><a th:href="@{/events/all-events}">Browse Events</a></li>
+                <li><a th:href="@{/events/create-event}">Create Event</a></li>
+                <li><a th:href="@{/about-us}">About</a></li>
+                <!--                TODO-->
+                <!--                <li><a th:href="@{/dashboard}" class="btn btn-primary" th:text="${user.username}"></a></li>-->
             </ul>
         </nav>
     </div>
 </header>
-
-<main>
+<section class="page-header">
     <div class="container">
-        <div class="purchase-header">
-            <h1>Purchase Tickets</h1>
-            <p>Tech Conference 2025 | March 15-17, 2025 | Tech Convention Center</p>
+        <h1 class="page-title">Purchase Tickets</h1>
+        <p class="page-subtitle" th:text="${'Complete your ticket purchase for '}">Complete your registration for Tech Innovation Summit 2025</p>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-steps">
+            <div class="progress-step active" id="step1">
+                <div class="step-number">1</div>
+                <div class="step-label">Tickets</div>
+            </div>
+            <div class="progress-step" id="step2">
+                <div class="step-number">2</div>
+                <div class="step-label">Attendee Info</div>
+            </div>
+            <div class="progress-step" id="step3">
+                <div class="step-number">3</div>
+                <div class="step-label">Confirmation</div>
+            </div>
         </div>
+        <div class="progress-bar">
+            <div class="progress-bar-fill"></div>
+        </div>
+    </div>
 
-        <div class="purchase-content">
-            <div class="ticket-options">
-                <h2>Select Tickets</h2>
 
-                <div class="ticket-type">
-                    <div class="ticket-info">
-                        <h3>General Admission</h3>
-                        <p>Access to all general sessions, expo hall, and networking events</p>
-                        <div class="ticket-price">$199</div>
-                    </div>
-                    <div class="ticket-quantity">
-                        <button class="quantity-btn minus">-</button>
-                        <input type="number" value="0" min="0" max="10" class="quantity-input">
-                        <button class="quantity-btn plus">+</button>
-                    </div>
-                </div>
-
-                <div class="ticket-type">
-                    <div class="ticket-info">
-                        <h3>VIP Access</h3>
-                        <p>All General Admission benefits plus VIP lounge access, exclusive workshops, and premium swag bag</p>
-                        <div class="ticket-price">$399</div>
-                    </div>
-                    <div class="ticket-quantity">
-                        <button class="quantity-btn minus">-</button>
-                        <input type="number" value="0" min="0" max="10" class="quantity-input">
-                        <button class="quantity-btn plus">+</button>
-                    </div>
-                </div>
-
-                <div class="ticket-type">
-                    <div class="ticket-info">
-                        <h3>Workshop Pass</h3>
-                        <p>Add-on access to specialized hands-on workshops (requires General Admission or VIP)</p>
-                        <div class="ticket-price">$99</div>
-                    </div>
-                    <div class="ticket-quantity">
-                        <button class="quantity-btn minus">-</button>
-                        <input type="number" value="0" min="0" max="10" class="quantity-input">
-                        <button class="quantity-btn plus">+</button>
-                    </div>
-                </div>
+    <div id="ticket-selection" class="section active">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Select Tickets</h2>
             </div>
-
-            <div class="attendee-information">
-                <h2>Attendee Information</h2>
-                <p>Please provide details for each attendee</p>
-
-                <div class="attendee-form">
-                    <h3>Attendee #1 (General Admission)</h3>
-                    <form>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="firstName">First Name</label>
-                                <input type="text" id="firstName" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="lastName">Last Name</label>
-                                <input type="text" id="lastName" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="company">Company/Organization</label>
-                            <input type="text" id="company">
-                        </div>
-                        <div class="form-group">
-                            <label for="dietaryRestrictions">Dietary Restrictions</label>
-                            <select id="dietaryRestrictions">
-                                <option value="none">None</option>
-                                <option value="vegetarian">Vegetarian</option>
-                                <option value="vegan">Vegan</option>
-                                <option value="gluten-free">Gluten-Free</option>
-                                <option value="other">Other (Please specify)</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Additional attendee forms would be dynamically added here based on quantity selected -->
-            </div>
-
-            <div class="order-summary">
-                <h2>Order Summary</h2>
-                <div class="summary-item">
-                    <div class="item-label">1 × General Admission</div>
-                    <div class="item-price">$199.00</div>
-                </div>
-                <div class="summary-item">
-                    <div class="item-label">Service Fee</div>
-                    <div class="item-price">$10.00</div>
-                </div>
-                <div class="summary-item total">
-                    <div class="item-label">Total</div>
-                    <div class="item-price">$209.00</div>
-                </div>
-
-                <div class="promo-code">
-                    <label for="promoCode">Promo Code</label>
-                    <div class="promo-input">
-                        <input type="text" id="promoCode" placeholder="Enter promo code">
-                        <button class="btn-secondary">Apply</button>
+            <div class="card-body">
+                <div class="ticket-option selected">
+                    <div class="ticket-details">
+                        <div class="ticket-name">Standard Admission</div>
+                        <div class="ticket-description">Full access to all keynotes, panels, and workshops</div>
+                        <div class="ticket-availability">87 tickets remaining</div>
                     </div>
+                    <div class="ticket-price">€149.99</div>
                 </div>
 
-                <div class="payment-options">
-                    <h3>Payment Method</h3>
-                    <div class="payment-methods">
-                        <label class="payment-method">
-                            <input type="radio" name="paymentMethod" value="creditCard" checked>
-                            <span>Credit Card</span>
-                        </label>
-                        <label class="payment-method">
-                            <input type="radio" name="paymentMethod" value="paypal">
-                            <span>PayPal</span>
-                        </label>
+                <div class="ticket-option">
+                    <div class="ticket-details">
+                        <div class="ticket-name">VIP Experience</div>
+                        <div class="ticket-description">Premium seating, exclusive networking event, and speaker meet & greet</div>
+                        <div class="ticket-availability">23 tickets remaining</div>
                     </div>
-
-                    <div class="credit-card-form">
-                        <div class="form-group">
-                            <label for="cardNumber">Card Number</label>
-                            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="expiryDate">Expiry Date</label>
-                                <input type="text" id="expiryDate" placeholder="MM/YY">
-                            </div>
-                            <div class="form-group">
-                                <label for="cvv">CVV</label>
-                                <input type="text" id="cvv" placeholder="123">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="cardName">Name on Card</label>
-                            <input type="text" id="cardName">
-                        </div>
-                    </div>
+                    <div class="ticket-price">€299.99</div>
                 </div>
 
-                <div class="terms-agreement">
-                    <label class="checkbox-container">
-                        <input type="checkbox" required>
-                        <span class="checkmark"></span>
-                        I agree to the <a href="terms.html">Terms & Conditions</a> and <a href="privacy.html">Privacy Policy</a>
-                    </label>
-                </div>
-
-                <button class="btn-primary btn-large">Complete Purchase</button>
+                <button class="btn btn-primary" onclick="showAttendeeInfo()">Continue to Attendee Information</button>
             </div>
         </div>
     </div>
-</main>
 
-<footer>
-    <div class="container">
-        <div class="footer-content">
-            <div class="footer-section about">
-                <h3>EventSphere</h3>
-                <p>Your one-stop platform for discovering and managing events.</p>
+
+    <div id="attendee-info" class="section">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Attendee Information</h2>
             </div>
-            <div class="footer-section links">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
-                    <li><a href="terms.html">Terms & Conditions</a></li>
-                    <li><a href="privacy.html">Privacy Policy</a></li>
-                </ul>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">First Name</label>
+                    <input type="text" class="form-input" placeholder="Enter first name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" class="form-input" placeholder="Enter last name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" placeholder="Enter email address">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="text" class="form-input" placeholder="Enter phone number">
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" class="checkbox-input">
+                    <label for="terms">I agree to the Terms & Conditions and Privacy Policy</label>
+                </div>
+
+                <button class="btn btn-primary" onclick="showConfirmation()">Complete Purchase</button>
             </div>
-            <div class="footer-section contact">
-                <h3>Contact Us</h3>
-                <p><i class="icon-email"></i> support@eventsphere.com</p>
-                <p><i class="icon-phone"></i> (123) 456-7890</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 EventSphere. All rights reserved.</p>
         </div>
     </div>
-</footer>
+
+    <!-- Confirmation -->
+    <div id="confirmation" class="section">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title" style="text-align: center;">Thank You!</h2>
+                <p style="text-align: center; margin-bottom: 20px;">Your tickets for Tech Innovation Summit 2025 have been successfully purchased.</p>
+                <p style="text-align: center; color: var(--gray);">A confirmation email has been sent to your email address.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showAttendeeInfo() {
+
+        document.getElementById('ticket-selection').classList.remove('active');
+        document.getElementById('step1').classList.remove('active');
+
+
+        document.getElementById('attendee-info').classList.add('active');
+        document.getElementById('step2').classList.add('active');
+
+
+        document.querySelector('.progress-bar-fill').style.width = '66%';
+    }
+
+    function showConfirmation() {
+
+        document.getElementById('attendee-info').classList.remove('active');
+        document.getElementById('step2').classList.remove('active');
+
+
+        document.getElementById('confirmation').classList.add('active');
+        document.getElementById('step3').classList.add('active');
+
+
+        document.querySelector('.progress-bar-fill').style.width = '100%';
+    }
+</script>
 </body>
 </html>
