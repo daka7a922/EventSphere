@@ -51,7 +51,6 @@ public class EventService {
         logData.setMessage("New event created: " + event.getName());
         logData.setRecipient("admin@eventsphere.com");
         logData.setEventReference("Event id: " + event.getId());
-        logData.setTimestamp(LocalDateTime.now());
 
         notificationClient.sendNotification(logData)
                 .subscribe( // Subscribe to trigger the call and handle the response/error
