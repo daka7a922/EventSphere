@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventSphere - Notifications</title>
+  <style>
+    :root {
+      --primary: #4e54c8;
+      --primary-dark: #363795;
+      --secondary: #ff4081;
+      --light: #f5f5f5;
+      --dark: #333;
+      --gray: #777;
+      --success: #28a745;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* Header Styles */
+    header {
+      background: linear-gradient(to right, var(--primary-dark), var(--primary));
+      color: white;
+      padding: 1rem 0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+
+    .nav-links li {
+      margin-left: 1.5rem;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background-color: var(--secondary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #e03070;
+    }
+
+    .btn-sm {
+      padding: 0.25rem 1rem;
+      font-size: 0.9rem;
+    }
+
+    /* Dashboard Layout */
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 30px;
+      margin: 30px 0;
+    }
+
+    /* Sidebar */
+    .dashboard-sidebar {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      padding: 20px 0;
+      height: fit-content;
+    }
+
+    .user-profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .user-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #ddd;
+      background-image: url('/api/placeholder/200/200');
+      background-size: cover;
+      background-position: center;
+      margin-bottom: 15px;
+    }
+
+    .user-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .user-email {
+      font-size: 0.9rem;
+      color: var(--gray);
+      margin-bottom: 15px;
+    }
+
+    .nav-menu {
+      list-style: none;
+    }
+
+    .nav-menu li a {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      color: var(--dark);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .nav-menu li a:hover {
+      background-color: rgba(78, 84, 200, 0.1);
+      color: var(--primary);
+    }
+
+    .nav-menu li.active a {
+      background-color: rgba(78, 84, 200, 0.2);
+      color: var(--primary);
+      font-weight: 500;
+      border-left: 3px solid var(--primary);
+    }
+
+    .nav-icon {
+      margin-right: 10px;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+    }
+
+    /* Main Content */
+    .dashboard-main {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      margin: 0;
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    /* Notification Styles */
+    .notification-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .notification-item {
+      display: flex;
+      padding: 15px;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .notification-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .notification-item.unread {
+      border-left: 3px solid var(--primary);
+      background-color: rgba(78, 84, 200, 0.03);
+    }
+
+    .notification-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(78, 84, 200, 0.1);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+
+    .notification-content {
+      flex: 1;
+    }
+
+    .notification-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .notification-text {
+      color: var(--gray);
+      font-size: 0.95rem;
+      margin-bottom: 5px;
+    }
+
+    .notification-time {
+      color: var(--gray);
+      font-size: 0.8rem;
+    }
+
+    .notification-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Notification Filters */
+    .notification-filters {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 30px;
+      padding: 5px 15px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .filter-btn.active {
+      background-color: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .filter-btn:hover {
+      background-color: rgba(78, 84, 200, 0.1);
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--dark);
+      color: white;
+      padding: 3rem 0 1rem;
+      margin-top: 50px;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-bottom: 2rem;
+    }
+
+    .footer-column h3 {
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column ul li {
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-column a {
+      color: #ddd;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-column a:hover {
+      color: white;
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .notification-filters {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- Header -->
+<header>
+  <div class="container">
+    <nav>
+      <a href="index.html" class="logo">EventSphere</a>
+      <ul class="nav-links">
+        <li><a href="events.html">Browse Events</a></li>
+        <li><a href="create-event.html">Create Event</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="#" class="btn btn-primary">Account</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- Dashboard Content -->
+<div class="container">
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <div class="dashboard-sidebar">
+      <div class="user-profile">
+        <div class="user-avatar"></div>
+        <h3 class="user-name">John Doe</h3>
+        <p class="user-email">john.doe@example.com</p>
+        <a href="edit-profile.html" class="btn btn-primary">Edit Profile</a>
+      </div>
+
+      <ul class="nav-menu">
+        <li><a href="dashboard.html"><span class="nav-icon">📊</span> Dashboard</a></li>
+        <li><a href="my-tickets.html"><span class="nav-icon">🎟️</span> My Tickets</a></li>
+        <li><a href="saved-events.html"><span class="nav-icon">❤️</span> Saved Events</a></li>
+        <li><a href="purchase-history.html"><span class="nav-icon">💰</span> Purchase History</a></li>
+        <li class="active"><a href="notifications.html"><span class="nav-icon">🔔</span> Notifications</a></li>
+        <li><a href="settings.html"><span class="nav-icon">⚙️</span> Settings</a></li>
+        <li><a href="logout.html"><span class="nav-icon">🚪</span> Logout</a></li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-main">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Notifications</h2>
+          <div>
+            <button class="btn btn-primary btn-sm">Mark All as Read</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="notification-filters">
+            <button class="filter-btn active">All (12)</button>
+            <button class="filter-btn">Unread (3)</button>
+            <button class="filter-btn">Events (5)</button>
+            <button class="filter-btn">Tickets (4)</button>
+            <button class="filter-btn">System (3)</button>
+          </div>
+
+          <div class="notification-list">
+            <!-- Notification 1 - Unread -->
+            <div class="notification-item unread">
+              <div class="notification-icon">📣</div>
+              <div class="notification-content">
+                <div class="notification-title">Tech Innovation Summit 2025 Updated</div>
+                <div class="notification-text">The venue for Tech Innovation Summit has been changed to Digital Convention Center Main Hall.</div>
+                <div class="notification-time">2 hours ago</div>
+              </div>
+            </div>
+
+            <!-- Notification 2 - Unread -->
+            <div class="notification-item unread">
+              <div class="notification-icon">🎟️</div>
+              <div class="notification-content">
+                <div class="notification-title">Ticket Confirmation</div>
+                <div class="notification-text">Your tickets for Summer Music Festival have been confirmed. Check your email for details.</div>
+                <div class="notification-time">1 day ago</div>
+              </div>
+            </div>
+
+            <!-- Notification 3 - Unread -->
+            <div class="notification-item unread">
+              <div class="notification-icon">💰</div>
+              <div class="notification-content">
+                <div class="notification-title">Refund Processed</div>
+                <div class="notification-text">Your refund for Opera Night: Carmen has been processed successfully. €189.99 will be credited to your account within 3-5 business days.</div>
+                <div class="notification-time">2 days ago</div>
+              </div>
+            </div>
+
+            <!-- Notification 4 -->
+            <div class="notification-item">
+              <div class="notification-icon">🎭</div>
+              <div class="notification-content">
+                <div class="notification-title">Upcoming Event Reminder</div>
+                <div class="notification-text">Your event AI Development Bootcamp is coming up in 3 days. Don't forget to add it to your calendar.</div>
+                <div class="notification-time">3 days ago</div>
+              </div>
+            </div>
+
+            <!-- Notification 5 -->
+            <div class="notification-item">
+              <div class="notification-icon">⭐</div>
+              <div class="notification-content">
+                <div class="notification-title">Rate Your Experience</div>
+                <div class="notification-text">How was the Photography Exhibition? Please take a moment to rate your experience.</div>
+                <div class="notification-time">1 week ago</div>
+              </div>
+            </div>
+
+            <!-- Notification 6 -->
+            <div class="notification-item">
+              <div class="notification-icon">🔔</div>
+              <div class="notification-content">
+                <div class="notification-title">New Events in Your Area</div>
+                <div class="notification-text">We found 5 new events in San Francisco that match your interests.</div>
+                <div class="notification-time">1 week ago</div>
+              </div>
+            </div>
+
+            <!-- Notification 7 -->
+            <div class="notification-item">
+              <div class="notification-icon">💯</div>
+              <div class="notification-content">
+                <div class="notification-title">Special Offer</div>
+                <div class="notification-text">Get 20% off your next ticket purchase with code SPRING2025. Valid until April 30.</div>
+                <div class="notification-time">2 weeks ago</div>
+              </div>
+            </div>
+
+            <!-- Notification 8 -->
+            <div class="notification-item">
+              <div class="notification-icon">🎟️</div>
+              <div class="notification-content">
+                <div class="notification-title">Early Bird Tickets Available</div>
+                <div class="notification-text">Early bird tickets for Summer Jazz Festival are now available at a discounted price.</div>
+                <div class="notification-time">2 weeks ago</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 20px;">
+            <span style="color: var(--gray);">Showing 8 of 12 notifications</span>
+            <div style="margin-top: 10px;">
+              <a href="#
